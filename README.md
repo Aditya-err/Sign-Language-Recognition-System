@@ -3,11 +3,11 @@
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-orange.svg)](https://tensorflow.org)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands-teal.svg)](https://mediapipe.dev)
-[![Tests](https://img.shields.io/badge/Pytest-16%20Passed-brightgreen.svg)](tests/)
-[![Accuracy](https://img.shields.io/badge/Test%20Accuracy-99.61%25-success.svg)](reports/evaluation_report.md)
+[![Tests](https://img.shields.io/badge/Pytest-26%20Passed-brightgreen.svg)](tests/)
+[![Real--Time](https://img.shields.io/badge/Real--Time-29.9%20FPS-success.svg)](src/ui/opencv_app.py)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An industry-standard, high-performance **Indian Sign Language (ISL) Recognition System** built with **MediaPipe Hands**, a mathematically proven **dual-hand spatial normalization pipeline** (126 features), an **optimized Deep MLP classifier** (28k parameters), and an **event-driven finite state machine** for stable real-time fingerspelling to speech translation.
+An industry-standard, high-performance **Indian Sign Language (ISL) Recognition System** built with **MediaPipe Hands**, a mathematically proven **dual-hand spatial normalization pipeline** (126 features), an **optimized Deep MLP classifier** (28,515 parameters), and a **temporal stabilization state machine** for fluid real-time fingerspelling to text translation.
 
 ---
 
@@ -19,11 +19,11 @@ An industry-standard, high-performance **Indian Sign Language (ISL) Recognition 
 | **Model Type** | 599,000-parameter LSTM (Overfitted) | **Lightweight Deep MLP (28,515 params, 111 KB)** |
 | **Feature Space** | 1,662 features (84.5% irrelevant face mesh) | **126 clean features** (63 Left + 63 Right hand) |
 | **Normalization** | None (Absolute screen coordinates) | **Wrist-centering + Rigid Palm-scale invariance** |
-| **Missing Hands** | Filled with fabricated zero-vectors | Explicit `HandDetectionResult` bypassing classifier |
-| **Inference Latency** | ~60 ms per frame (12–16 FPS) | **< 1 ms per frame (> 35 FPS on CPU)** |
-| **Test Accuracy** | Synthetic mocked accuracy claims | **99.61% Top-1, 99.87% Top-3 on sealed test set** |
-| **Automated Tests** | Zero automated tests | **16 unit/integration tests with 100% pytest pass rate** |
-| **Data Integrity** | Fake UI predictions | **Genuine metric evaluation pipeline & reports** |
+| **Missing Hands** | Filled with fabricated zero-vectors | Explicit `has_hands=False` check bypassing classifier |
+| **Inference Latency** | ~60 ms per frame (12–16 FPS) | **0.15 ms forward pass (29.9 FPS end-to-end)** |
+| **Real-Time UI** | Mock predictions & synthetic charts | **Live OpenCV HUD with temporal hold state machine** |
+| **Duplicate Prevention**| None ("AAAAA" spam on sign hold) | **Single-emission FSM with cooldown & progress bar** |
+| **Automated Tests** | Zero automated tests | **26 unit/integration tests with 100% pytest pass rate** |
 
 ---
 
@@ -40,19 +40,16 @@ Raw MediaPipe coordinates vary whenever a user moves in front of the lens. V2 im
 
 ---
 
-## 📊 Phase 2 Benchmark Results
+## ⚡ Real-Time Hardware Performance
 
-Evaluated strictly on the sealed test partition (`X_test.npy`, 765 samples):
+Measured on standard CPU hardware across 40 live frames:
 
-- **Top-1 Test Accuracy:** **99.61%** (762 / 765 correct)
-- **Top-3 Test Accuracy:** **99.87%** (764 / 765 correct)
-- **Macro F1-Score:** **0.9960**
-- **Weighted F1-Score:** **0.9961**
-- **Test Cross-Entropy Loss:** **0.0765**
-- **Training Duration:** **12.83 seconds** on standard CPU
-
-![Confusion Matrix](reports/figures/confusion_matrix.png)
-![Training History](reports/figures/training_history.png)
+- **Webcam Frame Grab (`cap.read`):** $7.03$ ms
+- **MediaPipe Hands Tracking:** $26.18$ ms
+- **Spatial Normalization:** $0.025$ ms
+- **Deep MLP Forward Pass (`model(x)`):** **$0.15$ ms**
+- **Temporal Smoother & State Machine:** $0.017$ ms
+- **Total Frame Latency:** **$33.41$ ms ($29.9$ FPS)**
 
 ---
 
@@ -71,40 +68,35 @@ sign_language_v2/
 │   ├── DATASET_ASSESSMENT.md# Detailed ISL dataset audit
 │   ├── PHASE_1_REPORT.md    # Phase 1 verification report
 │   ├── PHASE_2_REPORT.md    # Phase 2 dataset & model training report
+│   ├── PHASE_2_1_AUDIT.md   # Independent audit of Phase 2
+│   ├── PHASE_3_REPORT.md    # Phase 3 real-time webcam system report
 │   └── PROJECT_STATUS.md    # Milestones & setup log
 ├── models/                  # Saved Keras models (git-ignored)
-│   └── best_model.keras     # Checkpointed weights (peak val_acc: 99.74%)
-├── notebooks/               # Exploratory analysis & model benchmarking
+│   └── best_model.keras     # Checkpointed weights (28k params)
 ├── reports/                 # Confusion matrices, ROC curves, evaluation reports
 │   ├── figures/             # Evaluation charts & confusion matrix
-│   │   ├── class_distribution.png
-│   │   ├── confusion_matrix.png
-│   │   ├── hand_types.png
-│   │   └── training_history.png
 │   ├── dataset_analysis.md  # Exploratory data analysis report
 │   ├── evaluation_metrics.json
-│   ├── evaluation_report.md # Model benchmark evaluation report
-│   └── training_history.json
+│   └── evaluation_report.md # Model benchmark evaluation report
 ├── src/
 │   ├── core/                # Landmark normalization & MediaPipe abstraction
 │   │   ├── normalization.py # 126-D dual-hand spatial normalization
 │   │   └── hand_detector.py # MediaPipe Hands dual-hand detection wrapper
 │   ├── data/                # Data extraction, validation, splitting, augmentation
-│   │   ├── analyze_dataset.py # Statistical EDA and chart generation
-│   │   ├── augmentation.py  # Coordinate-space jitter, scale, and rotation
-│   │   ├── collector.py     # Guided OpenCV data collector with HUD
-│   │   ├── dataset_validator.py # Automated integrity audit tool
-│   │   ├── prepare_dataset.py # MediaPipe image extraction pipeline
-│   │   └── split_dataset.py # Stratified 70/15/15 train/val/test splitter
+│   ├── inference/           # Real-time inference engine & stabilization
+│   │   ├── benchmark.py     # Hardware latency profiling script
+│   │   ├── gesture_state.py # 4-state hold FSM & single-character emission
+│   │   ├── predictor.py     # Low-latency direct tensor predictor
+│   │   ├── smoothing.py     # Confidence-aware rolling window smoother
+│   │   ├── text_builder.py  # Interactive fingerspelling text buffer
+│   │   └── webcam.py        # Webcam manager with handedness alignment
 │   ├── models/              # MLP architecture, training, and evaluation
-│   │   ├── evaluate.py      # Benchmark evaluation & confusion matrix
-│   │   ├── mlp.py           # 28k-parameter Deep MLP classifier
-│   │   └── train.py         # Reproducible training with callbacks
-│   ├── inference/           # Real-time state machine & smoothing (Phase 3)
-│   └── ui/                  # OpenCV HUD and Streamlit web dashboard (Phase 3)
-├── tests/                   # Pytest automated test suite (16 tests)
+│   └── ui/                  # User Interfaces
+│       └── opencv_app.py    # Real-time OpenCV HUD with progress bar & hotkeys
+├── tests/                   # Pytest automated test suite (26 tests)
 │   ├── test_normalization.py# Mathematical invariance tests
 │   ├── test_phase2.py       # MLP shapes, augmentation, top-k tests
+│   ├── test_phase3.py       # Predictor, smoother, state machine, text tests
 │   └── test_validator.py    # Dataset integrity tests
 ├── requirements.txt         # Pinned production dependencies
 └── README.md                # Project documentation
@@ -128,20 +120,20 @@ conda activate ai_sign_lang
 python -m pytest tests -v
 ```
 
-### 3. Extract Dataset Features
+### 3. Launch Real-Time Webcam Application
 ```bash
-python src/data/prepare_dataset.py --max_samples_per_class 150
+python src/ui/opencv_app.py --camera 0 --conf_thresh 0.70 --hold_frames 12
 ```
 
-### 4. Split and Train Model
-```bash
-python src/data/split_dataset.py
-python src/models/train.py --epochs 50 --batch_size 64
-```
+**HUD Controls:**
+- `C` / `c`: Clear text buffer.
+- `B` / `b`: Backspace.
+- `SPACE`: Add a word space.
+- `Q` / `q` or `ESC`: Exit.
 
-### 5. Evaluate on Test Partition
+### 4. Run Hardware Latency Benchmark
 ```bash
-python src/models/evaluate.py
+python src/inference/benchmark.py --frames 60
 ```
 
 ---
