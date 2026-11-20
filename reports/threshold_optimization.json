@@ -1,0 +1,44 @@
+{
+  "threshold_0.50": {
+    "threshold": 0.5,
+    "accepted_samples": 760,
+    "rejected_samples": 5,
+    "coverage_pct": 99.35,
+    "effective_precision_on_accepted": 99.737
+  },
+  "threshold_0.60": {
+    "threshold": 0.6,
+    "accepted_samples": 758,
+    "rejected_samples": 7,
+    "coverage_pct": 99.08,
+    "effective_precision_on_accepted": 99.868
+  },
+  "threshold_0.70": {
+    "threshold": 0.7,
+    "accepted_samples": 755,
+    "rejected_samples": 10,
+    "coverage_pct": 98.69,
+    "effective_precision_on_accepted": 100.0
+  },
+  "threshold_0.80": {
+    "threshold": 0.8,
+    "accepted_samples": 749,
+    "rejected_samples": 16,
+    "coverage_pct": 97.91,
+    "effective_precision_on_accepted": 100.0
+  },
+  "threshold_0.85": {
+    "threshold": 0.85,
+    "accepted_samples": 740,
+    "rejected_samples": 25,
+    "coverage_pct": 96.73,
+    "effective_precision_on_accepted": 100.0
+  },
+  "threshold_0.90": {
+    "threshold": 0.9,
+    "accepted_samples": 706,
+    "rejected_samples": 59,
+    "coverage_pct": 92.29,
+    "effective_precision_on_accepted": 100.0
+  }
+}
