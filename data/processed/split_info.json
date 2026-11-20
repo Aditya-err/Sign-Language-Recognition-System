@@ -1,0 +1,22 @@
+{
+  "random_state": 42,
+  "strategy": "StratifiedShuffleSplit",
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "sample_counts": {
+    "total": 5100,
+    "train": 3570,
+    "val": 765,
+    "test": 765
+  },
+  "feature_dim": 126,
+  "num_classes": 35,
+  "limitations_and_integrity": {
+    "participant_metadata_available": false,
+    "subject_level_splitting_possible": false,
+    "reason": "Archive dataset images lack participant IDs. Stratified random splitting was applied to guarantee exact class distribution balance. Potential subject-level leakage exists if the same signer appears in train and test; this is an inherent limitation of the legacy archive."
+  }
+}

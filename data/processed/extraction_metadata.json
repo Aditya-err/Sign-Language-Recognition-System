@@ -1,0 +1,837 @@
+{
+  "source_archive": "D:\\project\\Ai_sign language\\archive.zip",
+  "total_scanned": 5250,
+  "total_success": 5100,
+  "total_failed": 150,
+  "success_rate_pct": 97.14,
+  "feature_dim": 126,
+  "max_samples_per_class": 150,
+  "classes": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z"
+  ],
+  "num_classes": 35,
+  "hand_breakdown": {
+    "left_only": 1154,
+    "right_only": 2206,
+    "dual_hands": 1740
+  },
+  "per_class_stats": {
+    "1": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "2": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "3": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "4": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "5": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "6": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "7": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "8": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "9": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 1,
+      "right_only": 149,
+      "dual_hands": 0
+    },
+    "A": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 0,
+      "dual_hands": 150
+    },
+    "B": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 69,
+      "right_only": 0,
+      "dual_hands": 81
+    },
+    "C": {
+      "scanned": 150,
+      "success": 117,
+      "failed": 33,
+      "left_only": 67,
+      "right_only": 50,
+      "dual_hands": 0
+    },
+    "D": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 0,
+      "dual_hands": 150
+    },
+    "E": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 0,
+      "dual_hands": 150
+    },
+    "F": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 2,
+      "right_only": 85,
+      "dual_hands": 63
+    },
+    "G": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 1,
+      "right_only": 3,
+      "dual_hands": 146
+    },
+    "H": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "I": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 103,
+      "right_only": 47,
+      "dual_hands": 0
+    },
+    "J": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 150,
+      "right_only": 0,
+      "dual_hands": 0
+    },
+    "K": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 6,
+      "dual_hands": 144
+    },
+    "L": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 150,
+      "dual_hands": 0
+    },
+    "M": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 1,
+      "right_only": 0,
+      "dual_hands": 149
+    },
+    "N": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 2,
+      "right_only": 2,
+      "dual_hands": 146
+    },
+    "O": {
+      "scanned": 150,
+      "success": 125,
+      "failed": 25,
+      "left_only": 7,
+      "right_only": 118,
+      "dual_hands": 0
+    },
+    "P": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 149,
+      "right_only": 0,
+      "dual_hands": 1
+    },
+    "Q": {
+      "scanned": 150,
+      "success": 65,
+      "failed": 85,
+      "left_only": 64,
+      "right_only": 0,
+      "dual_hands": 1
+    },
+    "R": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 92,
+      "right_only": 0,
+      "dual_hands": 58
+    },
+    "S": {
+      "scanned": 150,
+      "success": 148,
+      "failed": 2,
+      "left_only": 28,
+      "right_only": 58,
+      "dual_hands": 62
+    },
+    "T": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 20,
+      "right_only": 0,
+      "dual_hands": 130
+    },
+    "U": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 149,
+      "right_only": 0,
+      "dual_hands": 1
+    },
+    "V": {
+      "scanned": 150,
+      "success": 145,
+      "failed": 5,
+      "left_only": 61,
+      "right_only": 84,
+      "dual_hands": 0
+    },
+    "W": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 131,
+      "right_only": 19,
+      "dual_hands": 0
+    },
+    "X": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 0,
+      "dual_hands": 150
+    },
+    "Y": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 57,
+      "right_only": 0,
+      "dual_hands": 93
+    },
+    "Z": {
+      "scanned": 150,
+      "success": 150,
+      "failed": 0,
+      "left_only": 0,
+      "right_only": 85,
+      "dual_hands": 65
+    }
+  },
+  "failed_samples_sample": [
+    {
+      "path": "Indian/C/006.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/007.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/008.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/009.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/010.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/011.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/012.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/013.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/014.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/015.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/016.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/017.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/018.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/019.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/020.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/021.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/022.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/023.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/024.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/025.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/026.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/027.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/028.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/029.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/030.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/031.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/033.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/038.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/062.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/069.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/081.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/093.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/C/094.jpg",
+      "class": "C",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/023.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/037.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/039.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/040.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/042.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/050.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/051.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/052.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/053.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/054.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/055.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/056.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/057.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/058.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/059.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/060.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/066.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/081.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/085.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/088.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/096.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/097.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/100 copy.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/101 copy.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/O/103 copy.jpg",
+      "class": "O",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/100.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/101.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1027.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1028.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1029.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/103.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1030.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1031.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1032.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1033.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1034.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1035.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1036.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1037.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1038.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1039.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/104.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1040.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1041.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1042.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1043.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1044.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1045.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1046.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1047.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1048.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1049.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/105.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1050.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1051.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1052.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1053.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1054.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1055.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1056.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1057.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1058.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1059.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/106.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1060.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    },
+    {
+      "path": "Indian/Q/1061.jpg",
+      "class": "Q",
+      "reason": "no_hands_detected"
+    }
+  ],
+  "extraction_duration_seconds": 337.55
+}

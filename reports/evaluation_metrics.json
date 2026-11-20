@@ -1,0 +1,28 @@
+{
+  "test_loss": 0.07654699683189392,
+  "test_accuracy_top1": 0.996078431372549,
+  "test_accuracy_top3": 0.9986928104575163,
+  "macro_precision": 0.9962105263157894,
+  "macro_recall": 0.9960117685518144,
+  "macro_f1": 0.995995280995281,
+  "weighted_f1": 0.9961038489469861,
+  "test_sample_count": 765,
+  "num_classes": 35,
+  "top_confused_pairs": [
+    {
+      "true_class": "M",
+      "predicted_class": "W",
+      "count": 1
+    },
+    {
+      "true_class": "N",
+      "predicted_class": "W",
+      "count": 1
+    },
+    {
+      "true_class": "O",
+      "predicted_class": "C",
+      "count": 1
+    }
+  ]
+}
