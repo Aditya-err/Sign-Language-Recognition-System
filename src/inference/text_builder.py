@@ -97,6 +97,22 @@ class TextBuilder:
         """
         return "".join(self.characters)
 
+    def get_full_text(self) -> str:
+        """Alias for get_text()."""
+        return self.get_text()
+
+    def append_char(self, char: str) -> bool:
+        """Alias for add_character()."""
+        return self.add_character(char)
+
+    @property
+    def current_word(self) -> str:
+        """Returns the current word being assembled (after last space)."""
+        full = self.get_text()
+        if " " in full:
+            return full.split(" ")[-1]
+        return full
+
     def is_empty(self) -> bool:
         """Returns True if the text buffer is empty."""
         return len(self.characters) == 0
