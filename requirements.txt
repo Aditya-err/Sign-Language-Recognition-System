@@ -1,0 +1,32 @@
+# ==============================================================================
+# Sign Language Recognition V2 — Core Dependencies
+# Python Target: >= 3.10, < 3.12 (Recommended: Python 3.10)
+# ==============================================================================
+
+# Computer Vision & Real-time Tracking
+opencv-python>=4.8.0,<=4.11.0
+mediapipe>=0.10.14,<=0.10.21
+
+# Deep Learning & Numerical Computing
+numpy>=1.24.0,<2.0.0
+tensorflow>=2.16.0,<=2.19.1
+onnxruntime>=1.17.0
+
+# Scientific Evaluation & Tabular Processing
+scikit-learn>=1.4.0
+pandas>=2.2.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Speech Synthesis & System Utilities
+pyttsx3>=2.90
+pyyaml>=6.0.1
+pydantic>=2.7.0
+
+# Interactive Web Application
+streamlit>=1.33.0
+
+# Code Quality & Testing Suite
+pytest>=8.1.0
+black>=24.3.0
+flake8>=7.0.0
