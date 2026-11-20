@@ -1,0 +1,26 @@
+{
+  "hardware_environment": {
+    "os": "Windows 10",
+    "cpu": "Intel64 Family 6 Model 142 Stepping 12, GenuineIntel",
+    "logical_cores": 8,
+    "python_version": "3.10.20"
+  },
+  "frames_profiled": 300,
+  "total_wall_time_seconds": 21.21,
+  "measured_effective_fps": 14.1,
+  "total_latency_distribution_ms": {
+    "mean": 70.7,
+    "median_p50": 63.91,
+    "p95": 109.1,
+    "min": 47.6,
+    "max": 174.12,
+    "std": 20.77
+  },
+  "component_averages_ms": {
+    "webcam_capture": 2.96,
+    "mediapipe_tracking": 67.05,
+    "dual_hand_normalization": 0.05,
+    "mlp_inference": 0.31,
+    "fsm_smoothing_render": 0.32
+  }
+}
