@@ -64,6 +64,7 @@ class ISLWebService:
         self.running = threading.Event()
         self.paused = False
         self.show_mesh = True
+        self.vocabulary_mode = "all"
         self.lock = threading.Lock()
 
         # Latest JPEG frame bytes for streaming
@@ -82,6 +83,7 @@ class ISLWebService:
             "current_word": "",
             "sentence": "",
             "image": "",
+            "mode": "all",
         }
 
         # Initialize text builder
@@ -141,8 +143,8 @@ class ISLWebService:
                     detection.left_landmarks, detection.right_landmarks
                 )
 
-                # 3. Deep MLP direct tensor inference (0.31 ms)
-                pred_result = predictor.predict(feature_vector)
+                # 3. Deep MLP direct tensor inference (0.31 ms) with mode filtering
+                pred_result = predictor.predict(feature_vector, mode=self.vocabulary_mode)
 
                 # 4. Temporal smoothing & FSM update
                 smoothed_result = smoother.update(pred_result)
@@ -190,6 +192,7 @@ class ISLWebService:
                         "current_word": self.text_builder.current_word,
                         "sentence": self.text_builder.get_text(),
                         "image": b64_frame,
+                        "mode": self.vocabulary_mode,
                     }
 
         except Exception as e:
@@ -279,6 +282,9 @@ class RequestHandler(BaseHTTPRequestHandler):
 
                 if "hold_frames" in payload:
                     self.service.hold_frames = int(payload["hold_frames"])
+
+                if "mode" in payload:
+                    self.service.vocabulary_mode = str(payload["mode"])
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

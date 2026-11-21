@@ -1,33 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cyber">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Sign Language Recognition System V2</title>
+    <title>Indian Sign Language AI Vision System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-base: #090d16;
-            --bg-surface: rgba(17, 24, 39, 0.72);
-            --bg-surface-elevated: rgba(30, 41, 59, 0.65);
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-highlight: rgba(99, 102, 241, 0.35);
+        /* THEMES: AI RESEARCH GRADE PALETTES */
+        :root[data-theme="cyber"] {
+            --bg-base: #06090e;
+            --bg-surface: rgba(11, 16, 26, 0.78);
+            --bg-surface-elevated: rgba(18, 26, 42, 0.85);
+            --border-glass: rgba(56, 189, 248, 0.16);
+            --border-highlight: rgba(56, 189, 248, 0.45);
             
-            --brand-primary: #3b82f6;
-            --brand-indigo: #6366f1;
+            --ai-accent: #06b6d4;
+            --ai-accent-bright: #38bdf8;
+            --ai-glow: rgba(6, 182, 212, 0.35);
+            --ai-tag-bg: rgba(6, 182, 212, 0.12);
+            --ai-tag-border: rgba(6, 182, 212, 0.3);
+            --reticle-color: #38bdf8;
+        }
+
+        :root[data-theme="neural"] {
+            --bg-base: #08060f;
+            --bg-surface: rgba(16, 12, 28, 0.78);
+            --bg-surface-elevated: rgba(26, 20, 46, 0.85);
+            --border-glass: rgba(168, 85, 247, 0.16);
+            --border-highlight: rgba(168, 85, 247, 0.45);
+            
+            --ai-accent: #a855f7;
+            --ai-accent-bright: #c084fc;
+            --ai-glow: rgba(168, 85, 247, 0.35);
+            --ai-tag-bg: rgba(168, 85, 247, 0.12);
+            --ai-tag-border: rgba(168, 85, 247, 0.3);
+            --reticle-color: #c084fc;
+        }
+
+        :root[data-theme="solar"] {
+            --bg-base: #0a0804;
+            --bg-surface: rgba(22, 16, 8, 0.78);
+            --bg-surface-elevated: rgba(36, 26, 14, 0.85);
+            --border-glass: rgba(245, 158, 11, 0.16);
+            --border-highlight: rgba(245, 158, 11, 0.45);
+            
+            --ai-accent: #f59e0b;
+            --ai-accent-bright: #fbbf24;
+            --ai-glow: rgba(245, 158, 11, 0.35);
+            --ai-tag-bg: rgba(245, 158, 11, 0.12);
+            --ai-tag-border: rgba(245, 158, 11, 0.3);
+            --reticle-color: #fbbf24;
+        }
+
+        :root {
             --status-success: #10b981;
             --status-warning: #f59e0b;
             --status-danger: #ef4444;
-            --status-neutral: #64748b;
             
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
-            --text-tertiary: #64748b;
+            --text-muted: #64748b;
             
-            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --font-code: 'JetBrains Mono', Consolas, monospace;
         }
 
         * {
@@ -38,7 +76,7 @@
         }
 
         body {
-            font-family: var(--font-sans);
+            font-family: var(--font-body);
             background-color: var(--bg-base);
             color: var(--text-primary);
             min-height: 100vh;
@@ -46,8 +84,11 @@
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 12% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 88% 90%, rgba(99, 102, 241, 0.06) 0%, transparent 45%);
+                radial-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+                radial-gradient(circle at 18% 12%, var(--ai-glow) 0%, transparent 45%),
+                radial-gradient(circle at 82% 88%, rgba(99, 102, 241, 0.05) 0%, transparent 45%);
+            background-size: 28px 28px, 100% 100%, 100% 100%;
+            transition: background 0.3s ease;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -57,32 +98,45 @@
             justify-content: space-between;
             align-items: center;
             padding: 14px 32px;
-            background: rgba(11, 15, 25, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
-            z-index: 20;
+            background: rgba(8, 12, 20, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-glass);
+            z-index: 30;
         }
 
-        .brand {
+        .header-brand {
             display: flex;
             align-items: center;
             gap: 14px;
         }
 
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
+        .ai-core-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.5));
+            border: 1px solid var(--border-highlight);
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--brand-primary);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+            color: var(--ai-accent-bright);
+            box-shadow: 0 0 16px var(--ai-glow);
+            position: relative;
         }
 
-        .brand-text h1 {
+        .ai-core-icon::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, var(--ai-accent), transparent 60%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .brand-meta h1 {
+            font-family: var(--font-display);
             font-size: 16px;
             font-weight: 700;
             letter-spacing: -0.2px;
@@ -92,58 +146,107 @@
             gap: 8px;
         }
 
-        .version-badge {
+        .ai-pill {
+            font-family: var(--font-code);
             font-size: 10px;
-            font-weight: 600;
-            padding: 2px 7px;
+            font-weight: 700;
+            padding: 2px 8px;
             border-radius: 4px;
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: var(--ai-tag-bg);
+            color: var(--ai-accent-bright);
+            border: 1px solid var(--ai-tag-border);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
-        .brand-text p {
-            font-size: 12px;
+        .brand-meta p {
+            font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 400;
+            font-family: var(--font-code);
             margin-top: 2px;
         }
 
-        .telemetry-strip {
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* THEME TOGGLE */
+        .theme-capsule {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .theme-pill-btn {
+            background: transparent;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-pill-btn.active {
+            background: var(--bg-surface-elevated);
+            color: #ffffff;
+            border: 1px solid var(--border-highlight);
+        }
+
+        .theme-color-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .telemetry-cluster {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .metric-pill {
+        .telemetry-tag {
             display: flex;
             align-items: center;
             gap: 8px;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--border-glass);
             border-radius: 8px;
             padding: 6px 12px;
-            font-size: 12px;
-            font-weight: 500;
+            font-family: var(--font-code);
+            font-size: 11px;
             color: var(--text-secondary);
         }
 
-        .metric-pill strong {
-            color: var(--text-primary);
-            font-weight: 600;
+        .telemetry-tag strong {
+            color: #ffffff;
         }
 
-        .status-indicator {
+        .live-beacon {
             width: 7px;
             height: 7px;
             border-radius: 50%;
             background-color: var(--status-success);
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+            box-shadow: 0 0 8px var(--status-success);
+            animation: pulse-beacon 2s infinite;
         }
 
-        /* MAIN CONTENT LAYOUT */
+        @keyframes pulse-beacon {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        /* WORKSPACE LAYOUT */
         main {
             flex: 1;
             display: grid;
@@ -158,35 +261,37 @@
         @media (max-width: 1120px) {
             main {
                 grid-template-columns: 1fr;
-                padding: 18px 20px;
+                padding: 16px 20px;
             }
         }
 
-        /* GLASS CARD COMMON */
-        .glass-panel {
+        /* PANELS WITH GLASS & RETICLE TARGETING */
+        .ai-panel {
             background: var(--bg-surface);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--border-glass);
             border-radius: 16px;
             padding: 22px;
             display: flex;
             flex-direction: column;
             gap: 18px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
         }
 
-        .panel-header {
+        .panel-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .panel-title {
-            font-size: 13px;
+            font-family: var(--font-display);
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
@@ -194,16 +299,46 @@
         }
 
         .panel-title svg {
-            color: var(--brand-primary);
+            color: var(--ai-accent-bright);
         }
 
-        /* VIDEO STREAM CONTAINER */
-        .viewport-box {
+        /* MODE SELECTOR (ALL / DIGITS / ALPHABETS) */
+        .mode-toggle-group {
+            display: flex;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .mode-chip-btn {
+            background: transparent;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-family: var(--font-code);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mode-chip-btn.active {
+            background: var(--ai-accent);
+            color: #06090e;
+            font-weight: 700;
+            box-shadow: 0 0 12px var(--ai-glow);
+        }
+
+        /* CAMERA VIEWPORT WITH HUD CORNERS */
+        .camera-viewport {
             position: relative;
             width: 100%;
             aspect-ratio: 4 / 3;
             max-height: 480px;
-            background: #000000;
+            background: #020408;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             overflow: hidden;
@@ -213,15 +348,31 @@
             transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .viewport-box.holding {
-            border-color: rgba(245, 158, 11, 0.5);
-            box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+        .camera-viewport.holding {
+            border-color: var(--ai-accent-bright);
+            box-shadow: 0 0 30px var(--ai-glow);
         }
 
-        .viewport-box.committed {
-            border-color: rgba(16, 185, 129, 0.6);
-            box-shadow: 0 0 28px rgba(16, 185, 129, 0.3);
+        .camera-viewport.committed {
+            border-color: var(--status-success);
+            box-shadow: 0 0 32px rgba(16, 185, 129, 0.45);
         }
+
+        /* HUD CORNER RETICLES */
+        .reticle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--reticle-color);
+            pointer-events: none;
+            opacity: 0.8;
+            z-index: 10;
+        }
+
+        .reticle-tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+        .reticle-tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+        .reticle-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+        .reticle-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
 
         #cameraStream {
             width: 100%;
@@ -229,46 +380,48 @@
             object-fit: cover;
         }
 
-        .loader-overlay {
+        .loader-box {
             position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
             color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
+            font-family: var(--font-code);
+            font-size: 12px;
         }
 
-        .spinner-ring {
-            width: 32px;
-            height: 32px;
+        .scanner-ring {
+            width: 36px;
+            height: 36px;
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid var(--brand-primary);
+            border-top: 2px solid var(--ai-accent-bright);
             border-radius: 50%;
-            animation: spin 0.9s linear infinite;
+            animation: spin 0.85s linear infinite;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .viewport-hud-top {
+        .hud-overlay-banner {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
+            top: 14px;
+            left: 36px;
+            right: 36px;
             display: flex;
             justify-content: space-between;
             pointer-events: none;
+            z-index: 11;
         }
 
-        .hud-chip {
-            background: rgba(15, 23, 42, 0.78);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .hud-badge {
+            background: rgba(6, 10, 18, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
             border-radius: 6px;
             padding: 4px 10px;
+            font-family: var(--font-code);
             font-size: 11px;
             font-weight: 600;
             color: #e2e8f0;
@@ -277,14 +430,14 @@
             gap: 6px;
         }
 
-        .hud-chip-dot {
+        .hud-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: var(--brand-primary);
+            background-color: var(--ai-accent-bright);
         }
 
-        .controls-toolbar {
+        .viewport-toolbar {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -293,7 +446,7 @@
         /* BUTTONS */
         .btn {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--border-glass);
             color: var(--text-primary);
             padding: 7px 14px;
             border-radius: 8px;
@@ -308,18 +461,19 @@
 
         .btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.18);
+            border-color: var(--border-highlight);
         }
 
-        .btn-primary {
-            background: var(--brand-primary);
-            border-color: var(--brand-primary);
-            color: #ffffff;
+        .btn-ai-primary {
+            background: var(--ai-accent);
+            border-color: var(--ai-accent);
+            color: #06090e;
+            font-weight: 700;
         }
 
-        .btn-primary:hover {
-            background: #2563eb;
-            border-color: #2563eb;
+        .btn-ai-primary:hover {
+            background: var(--ai-accent-bright);
+            box-shadow: 0 0 12px var(--ai-glow);
         }
 
         .btn-danger {
@@ -344,7 +498,7 @@
             color: #ffffff;
         }
 
-        .custom-toggle {
+        .toggle-switch {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -354,56 +508,52 @@
             cursor: pointer;
         }
 
-        .custom-toggle input {
-            accent-color: var(--brand-primary);
+        .toggle-switch input {
+            accent-color: var(--ai-accent);
             cursor: pointer;
         }
 
-        /* RECOGNITION HERO SECTION */
-        .hero-classifier {
+        /* HERO PREDICTION CARD */
+        .hero-prediction-deck {
             display: grid;
             grid-template-columns: 140px 1fr;
             gap: 20px;
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid var(--border-subtle);
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-glass);
             border-radius: 14px;
             padding: 18px;
             align-items: center;
+            position: relative;
         }
 
-        .glyph-container {
+        .hologram-glyph-box {
             width: 140px;
             height: 140px;
-            background: #0b0f19;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000000;
+            border: 1px solid var(--border-highlight);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-mono);
-            font-size: 76px;
+            font-family: var(--font-code);
+            font-size: 80px;
             font-weight: 700;
             color: #ffffff;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
-            transition: color 0.15s ease;
+            box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.9), 0 0 16px var(--ai-glow);
+            transition: all 0.2s ease;
         }
 
-        .classifier-metrics {
+        .prediction-meta {
             display: flex;
             flex-direction: column;
             gap: 14px;
         }
 
-        .state-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .state-tag {
+        .state-banner {
+            font-family: var(--font-code);
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.6px;
+            letter-spacing: 1px;
             padding: 4px 10px;
             border-radius: 6px;
             text-transform: uppercase;
@@ -418,36 +568,38 @@
         .state-holding {
             background: rgba(245, 158, 11, 0.15);
             color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.35);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            animation: pulse-beacon 1.2s infinite;
         }
 
         .state-committed {
             background: rgba(16, 185, 129, 0.18);
             color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.4);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
         }
 
         .state-locked {
             background: rgba(168, 85, 247, 0.15);
             color: #c084fc;
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.35);
         }
 
-        .meter-group {
+        .meter-item {
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
 
-        .meter-label {
+        .meter-meta {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-family: var(--font-code);
         }
 
-        .meter-track {
+        .meter-groove {
             width: 100%;
             height: 6px;
             background: rgba(255, 255, 255, 0.05);
@@ -455,30 +607,27 @@
             overflow: hidden;
         }
 
-        .meter-fill {
+        .meter-bar {
             height: 100%;
             border-radius: 4px;
             transition: width 0.15s ease-out;
+            background: var(--ai-accent);
         }
 
-        .fill-confidence {
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-        }
-
-        .fill-hold {
+        .meter-hold {
             background: linear-gradient(90deg, #f59e0b, #10b981);
         }
 
         /* TOP 3 HYPOTHESES */
-        .candidates-grid {
+        .hypotheses-trio {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
-        .candidate-card {
+        .hypo-slot {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--border-glass);
             border-radius: 8px;
             padding: 8px 12px;
             display: flex;
@@ -486,22 +635,23 @@
             gap: 4px;
         }
 
-        .candidate-head {
+        .hypo-slot-head {
             display: flex;
             justify-content: space-between;
+            font-family: var(--font-code);
             font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .candidate-rank {
-            color: var(--text-tertiary);
+        .hypo-rank {
+            color: var(--text-muted);
             font-size: 10px;
             font-weight: 700;
         }
 
         /* TEXT CONVERSATION BUFFER */
-        .buffer-meta-row {
+        .text-buffer-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -509,26 +659,26 @@
             color: var(--text-secondary);
         }
 
-        .active-word-badge {
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: #fbbf24;
+        .word-token-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--ai-accent-bright);
             padding: 3px 9px;
             border-radius: 6px;
-            font-family: var(--font-mono);
+            font-family: var(--font-code);
             font-size: 12px;
             font-weight: 600;
         }
 
-        .text-output-area {
+        .console-stream-box {
             width: 100%;
             height: 100px;
-            background: #090d16;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #020408;
+            border: 1px solid var(--border-glass);
             border-radius: 10px;
             padding: 12px 14px;
             color: #ffffff;
-            font-family: var(--font-mono);
+            font-family: var(--font-code);
             font-size: 14px;
             line-height: 1.6;
             resize: none;
@@ -536,47 +686,46 @@
             transition: border-color 0.15s ease;
         }
 
-        .text-output-area:focus {
-            border-color: rgba(99, 102, 241, 0.4);
+        .console-stream-box:focus {
+            border-color: var(--border-highlight);
         }
 
-        .actions-row {
+        .toolbar-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .actions-cluster {
+        .key-actions {
             display: flex;
             gap: 8px;
         }
 
-        /* SETTINGS & SLIDERS */
-        .tuning-grid {
+        /* SLIDERS */
+        .tuning-dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
             padding-top: 4px;
         }
 
-        .slider-block {
+        .slider-wrapper {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .slider-meta {
+        .slider-label-row {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-family: var(--font-code);
         }
 
-        .slider-meta span.val {
-            color: var(--brand-primary);
-            font-weight: 600;
-            font-family: var(--font-mono);
+        .slider-label-row span.val {
+            color: var(--ai-accent-bright);
+            font-weight: 700;
         }
 
         input[type="range"] {
@@ -593,9 +742,9 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: var(--ai-accent-bright);
             cursor: pointer;
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 8px var(--ai-glow);
             transition: transform 0.1s ease;
         }
 
@@ -604,12 +753,12 @@
         }
 
         /* INSTRUCTION FOOTNOTE */
-        .info-callout {
+        .intel-box {
             font-size: 11px;
             color: var(--text-secondary);
             line-height: 1.5;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--border-glass);
             border-radius: 8px;
             padding: 10px 14px;
             display: flex;
@@ -617,13 +766,13 @@
             align-items: flex-start;
         }
 
-        .info-callout svg {
+        .intel-box svg {
             flex-shrink: 0;
-            color: var(--text-tertiary);
+            color: var(--ai-accent-bright);
             margin-top: 2px;
         }
 
-        .info-callout strong {
+        .intel-box strong {
             color: #cbd5e1;
         }
 
@@ -632,14 +781,14 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-highlight);
             color: #ffffff;
             padding: 10px 18px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
             opacity: 0;
             transform: translateY(12px);
             transition: all 0.25s ease;
@@ -658,10 +807,10 @@
 </head>
 <body>
 
-    <!-- APPLICATION HEADER -->
+    <!-- TOP CONTROL BAR -->
     <header>
-        <div class="brand">
-            <div class="brand-icon">
+        <div class="header-brand">
+            <div class="ai-core-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
@@ -670,52 +819,63 @@
                     <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
                 </svg>
             </div>
-            <div class="brand-text">
-                <h1>Indian Sign Language Recognition <span class="version-badge">v2.0</span></h1>
-                <p>Real-Time Dual-Hand Computer Vision & Inference System</p>
+            <div class="brand-meta">
+                <h1>Indian Sign Language AI <span class="ai-pill">v2.0 Neural</span></h1>
+                <p>Real-Time Dual-Hand Spatial Vision & Landmark Kinematics</p>
             </div>
         </div>
 
-        <div class="telemetry-strip">
-            <div class="metric-pill">
-                <div class="status-indicator"></div>
-                <span id="headerFps">FPS: --</span>
+        <div class="header-actions">
+            <!-- 3 CURATED PROFESSIONAL AI THEMES -->
+            <div class="theme-capsule">
+                <button class="theme-pill-btn active" onclick="setTheme('cyber')" id="thCyber">
+                    <div class="theme-color-dot" style="background: #06b6d4;"></div>
+                    Cyber
+                </button>
+                <button class="theme-pill-btn" onclick="setTheme('neural')" id="thNeural">
+                    <div class="theme-color-dot" style="background: #a855f7;"></div>
+                    Neural
+                </button>
+                <button class="theme-pill-btn" onclick="setTheme('solar')" id="thSolar">
+                    <div class="theme-color-dot" style="background: #f59e0b;"></div>
+                    Solar
+                </button>
             </div>
-            <div class="metric-pill">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                </svg>
-                <span>Latency: <strong>0.31 ms</strong></span>
-            </div>
-            <div class="metric-pill">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                    <rect x="9" y="9" width="6" height="6"></rect>
-                </svg>
-                <span>Model: <strong>28.5k MLP</strong></span>
+
+            <div class="telemetry-cluster">
+                <div class="telemetry-tag">
+                    <div class="live-beacon"></div>
+                    <span id="headerFps">FPS: --</span>
+                </div>
+                <div class="telemetry-tag">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Latency: <strong>0.31 ms</strong></span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- MAIN TWO-COLUMN WORKSPACE -->
+    <!-- MAIN INTERACTIVE WORKSPACE -->
     <main>
-        <!-- LEFT COLUMN: LIVE VIDEO SENSOR & VISION CONTROLS -->
-        <section class="glass-panel">
-            <div class="panel-header">
+        <!-- LEFT PANEL: CAMERA VIEWPORT & SENSOR TELEMETRY -->
+        <section class="ai-panel">
+            <div class="panel-heading">
                 <div class="panel-title">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                         <circle cx="12" cy="13" r="4"></circle>
                     </svg>
-                    Optical Sensor (640x480)
+                    Optical Vision Sensor
                 </div>
-                <div class="controls-toolbar">
-                    <label class="custom-toggle">
+                <div class="viewport-toolbar">
+                    <label class="toggle-switch">
                         <input type="checkbox" id="chkMesh" checked onchange="toggleMesh()">
-                        Draw Landmark Mesh
+                        Landmark Skeleton
                     </label>
                     <button class="btn" id="btnPause" onclick="togglePause()">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                             <rect x="6" y="4" width="4" height="16"></rect>
                             <rect x="14" y="4" width="4" height="16"></rect>
                         </svg>
@@ -724,103 +884,108 @@
                 </div>
             </div>
 
-            <!-- CAMERA VIEWPORT -->
-            <div class="viewport-box" id="videoBox">
-                <div class="loader-overlay" id="videoLoader">
-                    <div class="spinner-ring"></div>
-                    <div>Initializing Camera & MediaPipe...</div>
+            <!-- VIEWPORT WITH RETICLE CORNERS -->
+            <div class="camera-viewport" id="videoBox">
+                <div class="reticle reticle-tl"></div>
+                <div class="reticle reticle-tr"></div>
+                <div class="reticle reticle-bl"></div>
+                <div class="reticle reticle-br"></div>
+
+                <div class="loader-box" id="videoLoader">
+                    <div class="scanner-ring"></div>
+                    <div>Calibrating Sensor & MediaPipe...</div>
                 </div>
-                <img id="cameraStream" src="" alt="Live Video Sensor">
+                <img id="cameraStream" src="" alt="Neural Camera Feed">
                 
-                <div class="viewport-hud-top">
-                    <div class="hud-chip">
-                        <div class="hud-chip-dot"></div>
+                <div class="hud-overlay-banner">
+                    <div class="hud-badge">
+                        <div class="hud-dot"></div>
                         <span id="chipHands">Hands: 0</span>
                     </div>
-                    <div class="hud-chip">
-                        DirectShow Fast I/O
+                    <div class="hud-badge">
+                        DirectShow 640x480
                     </div>
                 </div>
             </div>
 
-            <!-- INSTRUCTION FOOTNOTE -->
-            <div class="info-callout">
+            <!-- INTELLIGENCE FOOTNOTE -->
+            <div class="intel-box">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="16" x2="12" y2="12"></line>
                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
                 <div>
-                    <strong>ISL Formulation Note:</strong> Digits 1–9 use single-hand formations. Most alphabetic letters (A, B, D, M, N...) require two-handed formations. Hold each sign steady for 0.8s to commit to the sentence buffer.
+                    <strong>Testing Mode Tip:</strong> When testing <strong>1 to 5</strong>, switch to the <strong>Digits (1–9)</strong> filter mode on the right to focus the model exclusively on numerical signs.
                 </div>
             </div>
         </section>
 
-        <!-- RIGHT COLUMN: REAL-TIME RECOGNITION & TEXT ASSEMBLY -->
-        <section class="glass-panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-                    </svg>
-                    Real-Time Classification
+        <!-- RIGHT PANEL: NEURAL CLASSIFIER & TEXT SYNTHESIS -->
+        <section class="ai-panel">
+            <div class="panel-heading">
+                <!-- VOCABULARY MODE SWITCHER -->
+                <div class="mode-toggle-group">
+                    <button class="mode-chip-btn active" onclick="setMode('all')" id="btnModeAll">All 35 Signs</button>
+                    <button class="mode-chip-btn" onclick="setMode('digits')" id="btnModeDigits">Digits (1–9)</button>
+                    <button class="mode-chip-btn" onclick="setMode('alphabets')" id="btnModeAlpha">Alphabets (A–Z)</button>
                 </div>
-                <div id="stateBadge" class="state-tag state-idle">IDLE</div>
+                <div id="stateBadge" class="state-banner state-idle">IDLE</div>
             </div>
 
-            <!-- HERO RECOGNITION CARD -->
-            <div class="hero-classifier">
-                <div class="glyph-container" id="signGlyph">—</div>
-                <div class="classifier-metrics">
-                    <div class="meter-group">
-                        <div class="meter-label">
-                            <span>Top Hypothesis Confidence</span>
-                            <span id="txtConf" style="font-weight: 600; color: #ffffff;">0.0%</span>
+            <!-- HERO RECOGNITION DECK -->
+            <div class="hero-prediction-deck">
+                <div class="hologram-glyph-box" id="signGlyph">—</div>
+                <div class="prediction-meta">
+                    <div class="meter-item">
+                        <div class="meter-meta">
+                            <span>Classification Confidence</span>
+                            <span id="txtConf" style="font-weight: 700; color: #ffffff;">0.0%</span>
                         </div>
-                        <div class="meter-track">
-                            <div class="meter-fill fill-confidence" id="barConf" style="width: 0%;"></div>
+                        <div class="meter-groove">
+                            <div class="meter-bar" id="barConf" style="width: 0%;"></div>
                         </div>
                     </div>
 
-                    <div class="meter-group">
-                        <div class="meter-label">
+                    <div class="meter-item">
+                        <div class="meter-meta">
                             <span>Commit Hold Progress</span>
-                            <span id="txtHold" style="font-weight: 600; color: #ffffff;">0%</span>
+                            <span id="txtHold" style="font-weight: 700; color: #ffffff;">0%</span>
                         </div>
-                        <div class="meter-track">
-                            <div class="meter-fill fill-hold" id="barHold" style="width: 0%;"></div>
+                        <div class="meter-groove">
+                            <div class="meter-bar meter-hold" id="barHold" style="width: 0%;"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- TOP 3 HYPOTHESES -->
-            <div class="candidates-grid">
-                <div class="candidate-card">
-                    <div class="candidate-head">
+            <div class="hypotheses-trio">
+                <div class="hypo-slot">
+                    <div class="hypo-slot-head">
                         <span id="h1Name">—</span>
-                        <span class="candidate-rank">#1</span>
+                        <span class="hypo-rank">#1</span>
                     </div>
-                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h1Bar" style="width: 0%;"></div></div>
+                    <div class="meter-groove"><div class="meter-bar" id="h1Bar" style="width: 0%;"></div></div>
                 </div>
-                <div class="candidate-card">
-                    <div class="candidate-head">
+                <div class="hypo-slot">
+                    <div class="hypo-slot-head">
                         <span id="h2Name">—</span>
-                        <span class="candidate-rank">#2</span>
+                        <span class="hypo-rank">#2</span>
                     </div>
-                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h2Bar" style="width: 0%;"></div></div>
+                    <div class="meter-groove"><div class="meter-bar" id="h2Bar" style="width: 0%;"></div></div>
                 </div>
-                <div class="candidate-card">
-                    <div class="candidate-head">
+                <div class="hypo-slot">
+                    <div class="hypo-slot-head">
                         <span id="h3Name">—</span>
-                        <span class="candidate-rank">#3</span>
+                        <span class="hypo-rank">#3</span>
                     </div>
-                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h3Bar" style="width: 0%;"></div></div>
+                    <div class="meter-groove"><div class="meter-bar" id="h3Bar" style="width: 0%;"></div></div>
                 </div>
             </div>
 
             <!-- TEXT CONVERSATION BUFFER -->
-            <div class="buffer-meta-row">
+            <div class="text-buffer-header">
                 <div class="panel-title" style="margin-bottom: 0;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="4 7 4 4 20 4 20 7"></polyline>
@@ -830,15 +995,15 @@
                     Text Buffer
                 </div>
                 <div>
-                    Current Word: <span class="active-word-badge" id="currentWord">—</span>
+                    Current Word: <span class="word-token-chip" id="currentWord">—</span>
                 </div>
             </div>
 
-            <textarea class="text-output-area" id="sentenceText" placeholder="Committed gestures will assemble here sequentially..." readonly></textarea>
+            <textarea class="console-stream-box" id="sentenceText" placeholder="Committed gestures will assemble sequentially into words and sentences..." readonly></textarea>
 
-            <div class="actions-row">
-                <div class="actions-cluster">
-                    <button class="btn btn-primary" onclick="sendAction('space')">
+            <div class="toolbar-bottom">
+                <div class="key-actions">
+                    <button class="btn btn-ai-primary" onclick="sendAction('space')">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 18h16"></path>
                         </svg>
@@ -869,21 +1034,21 @@
                 </button>
             </div>
 
-            <!-- TUNING CONTROLS -->
-            <div class="tuning-grid">
-                <div class="slider-block">
-                    <div class="slider-meta">
+            <!-- SENSITIVITY SLIDERS -->
+            <div class="tuning-dashboard">
+                <div class="slider-wrapper">
+                    <div class="slider-label-row">
                         <span>Confidence Threshold</span>
-                        <span class="val" id="lblThresh">0.70</span>
+                        <span class="val" id="lblThresh">0.60</span>
                     </div>
-                    <input type="range" id="rngThresh" min="0.45" max="0.95" step="0.05" value="0.70" oninput="updateSliders()">
+                    <input type="range" id="rngThresh" min="0.40" max="0.95" step="0.05" value="0.60" oninput="updateSliders()">
                 </div>
-                <div class="slider-block">
-                    <div class="slider-meta">
-                        <span>Commit Hold Time</span>
+                <div class="slider-wrapper">
+                    <div class="slider-label-row">
+                        <span>Commit Hold Duration</span>
                         <span class="val" id="lblHold">12f (~0.8s)</span>
                     </div>
-                    <input type="range" id="rngHold" min="5" max="25" step="1" value="12" oninput="updateSliders()">
+                    <input type="range" id="rngHold" min="6" max="25" step="1" value="12" oninput="updateSliders()">
                 </div>
             </div>
         </section>
@@ -891,15 +1056,51 @@
 
     <!-- TOAST NOTIFICATION -->
     <div id="toast">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--ai-accent-bright);">
             <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <span id="toastMsg">Copied to clipboard!</span>
+        <span id="toastMsg">Action executed!</span>
     </div>
 
     <script>
         let isPaused = false;
         let isMeshEnabled = true;
+        let currentMode = "all";
+
+        // THEME MANAGEMENT
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('isl_theme', theme);
+            ['thCyber', 'thNeural', 'thSolar'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            if (theme === 'cyber') document.getElementById('thCyber').classList.add('active');
+            if (theme === 'neural') document.getElementById('thNeural').classList.add('active');
+            if (theme === 'solar') document.getElementById('thSolar').classList.add('active');
+        }
+
+        const savedTheme = localStorage.getItem('isl_theme') || 'cyber';
+        setTheme(savedTheme);
+
+        // VOCABULARY MODE SWITCHER
+        async function setMode(mode) {
+            currentMode = mode;
+            ['btnModeAll', 'btnModeDigits', 'btnModeAlpha'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            if (mode === 'all') document.getElementById('btnModeAll').classList.add('active');
+            if (mode === 'digits') document.getElementById('btnModeDigits').classList.add('active');
+            if (mode === 'alphabets') document.getElementById('btnModeAlpha').classList.add('active');
+
+            await fetch('/api/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: mode })
+            });
+
+            const modeLabel = mode === 'digits' ? 'Digits Only (1–9)' : (mode === 'alphabets' ? 'Alphabets Only (A–Z)' : 'All 35 Signs');
+            showToast(`Filter: ${modeLabel}`);
+        }
 
         async function pollTelemetry() {
             try {
@@ -939,7 +1140,7 @@
             const stateBadge = document.getElementById('stateBadge');
             const videoBox = document.getElementById('videoBox');
             const stateStr = data.state || 'IDLE';
-            stateBadge.className = 'state-tag state-' + stateStr.toLowerCase();
+            stateBadge.className = 'state-banner state-' + stateStr.toLowerCase();
             stateBadge.innerText = stateStr;
 
             videoBox.classList.remove('holding', 'committed');
@@ -959,14 +1160,23 @@
             if (top3[0]) {
                 document.getElementById('h1Name').innerText = `${top3[0][0]} (${Math.round(top3[0][1]*100)}%)`;
                 document.getElementById('h1Bar').style.width = Math.round(top3[0][1]*100) + '%';
+            } else {
+                document.getElementById('h1Name').innerText = '—';
+                document.getElementById('h1Bar').style.width = '0%';
             }
             if (top3[1]) {
                 document.getElementById('h2Name').innerText = `${top3[1][0]} (${Math.round(top3[1][1]*100)}%)`;
                 document.getElementById('h2Bar').style.width = Math.round(top3[1][1]*100) + '%';
+            } else {
+                document.getElementById('h2Name').innerText = '—';
+                document.getElementById('h2Bar').style.width = '0%';
             }
             if (top3[2]) {
                 document.getElementById('h3Name').innerText = `${top3[2][0]} (${Math.round(top3[2][1]*100)}%)`;
                 document.getElementById('h3Bar').style.width = Math.round(top3[2][1]*100) + '%';
+            } else {
+                document.getElementById('h3Name').innerText = '—';
+                document.getElementById('h3Bar').style.width = '0%';
             }
 
             // Sentence Buffer
@@ -989,8 +1199,8 @@
         async function togglePause() {
             isPaused = !isPaused;
             document.getElementById('btnPause').innerHTML = isPaused 
-                ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Resume'
-                : '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Pause';
+                ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Resume'
+                : '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Pause';
             await fetch('/api/control', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

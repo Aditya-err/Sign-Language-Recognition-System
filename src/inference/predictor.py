@@ -125,12 +125,13 @@ class SignPredictor:
         _ = self.model(dummy_input, training=False)
         logger.info("Inference engine initialized successfully (%d classes)", self.num_classes)
 
-    def predict(self, feature_vector: np.ndarray) -> PredictionResult:
+    def predict(self, feature_vector: np.ndarray, mode: str = "all") -> PredictionResult:
         """
         Generates sign class prediction from a 126-D normalized feature vector.
 
         Args:
             feature_vector: Array of shape (126,) or (1, 126).
+            mode: Vocabulary constraint mode ("all", "digits", or "alphabets").
 
         Returns:
             PredictionResult dataclass with predicted sign and probabilities.
@@ -203,6 +204,24 @@ class SignPredictor:
                 probs2 = self.model(x2, training=False).numpy()[0]
 
                 probs = probs2 if np.max(probs2) > np.max(probs1) else probs1
+
+        # Apply vocabulary mode constraint if specified
+        if mode == "digits":
+            # Mask out non-digit classes (indices 9 to 34 are alphabets)
+            mask = np.zeros(self.num_classes, dtype=bool)
+            mask[:9] = True
+            probs = np.where(mask, probs, 0.0)
+            p_sum = float(np.sum(probs))
+            if p_sum > 1e-6:
+                probs = probs / p_sum
+        elif mode == "alphabets":
+            # Mask out digit classes (indices 0 to 8 are digits 1..9)
+            mask = np.zeros(self.num_classes, dtype=bool)
+            mask[9:] = True
+            probs = np.where(mask, probs, 0.0)
+            p_sum = float(np.sum(probs))
+            if p_sum > 1e-6:
+                probs = probs / p_sum
 
         top_idx = int(np.argmax(probs))
         confidence = float(probs[top_idx])
