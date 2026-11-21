@@ -619,7 +619,7 @@
                     <div class="spinner"></div>
                     <div>Connecting camera & MediaPipe...</div>
                 </div>
-                <img id="cameraStream" src="/video_feed" alt="Webcam Feed" onload="onStreamLoaded()">
+                <img id="cameraStream" src="" alt="Webcam Feed">
                 
                 <div class="video-overlay-top">
                     <div class="overlay-chip" id="chipHands">Hands: 0 detected</div>
@@ -732,25 +732,33 @@
         let isPaused = false;
         let isMeshEnabled = true;
 
-        function onStreamLoaded() {
-            document.getElementById('videoLoader').style.display = 'none';
-        }
-
-        // Telemetry Polling Loop (every 60ms)
+        // Telemetry Polling Loop (every 35ms ~28 FPS)
         async function pollTelemetry() {
             try {
                 const res = await fetch('/api/telemetry');
-                if (!res.ok) return;
-                const data = await res.json();
-                updateUI(data);
+                if (res.ok) {
+                    const data = await res.json();
+                    updateUI(data);
+                }
             } catch (err) {
                 // Ignore transient network errors
             } finally {
-                setTimeout(pollTelemetry, 60);
+                setTimeout(pollTelemetry, 35);
             }
         }
 
         function updateUI(data) {
+            // Hide loader as soon as camera frame arrives
+            const loader = document.getElementById('videoLoader');
+            if (loader && data.image) {
+                loader.style.display = 'none';
+            }
+
+            // Update live video frame from Base64
+            if (data.image) {
+                document.getElementById('cameraStream').src = 'data:image/jpeg;base64,' + data.image;
+            }
+
             // 1. Badges & FPS
             document.getElementById('headerFps').innerText = `FPS: ${data.fps}`;
             document.getElementById('chipHands').innerText = `Hands: ${data.hands_detected} detected`;
@@ -858,7 +866,12 @@
         }
 
         // Start polling on load
-        window.onload = pollTelemetry;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', pollTelemetry);
+        } else {
+            pollTelemetry();
+        }
+        window.addEventListener('load', pollTelemetry);
     </script>
 </body>
 </html>

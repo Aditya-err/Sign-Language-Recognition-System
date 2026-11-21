@@ -55,6 +55,16 @@ class GestureStateOutput:
     emitted_char: Optional[str]
     status_message: str
 
+    @property
+    def current_state(self) -> GestureState:
+        """Compatibility alias for self.state."""
+        return self.state
+
+    @property
+    def committed_character(self) -> Optional[str]:
+        """Compatibility alias for self.emitted_char."""
+        return self.emitted_char
+
 
 class GestureStateManager:
     """

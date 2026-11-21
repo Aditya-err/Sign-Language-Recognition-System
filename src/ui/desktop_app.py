@@ -170,15 +170,15 @@ class InferenceWorker(threading.Thread):
                 # Package data packet for UI thread
                 packet = {
                     "frame": display_bgr,
-                    "hands_detected": detection.hands_detected,
-                    "sign": smoothed_result.class_name,
+                    "hands_detected": detection.hands_count,
+                    "sign": smoothed_result.class_label,
                     "confidence": smoothed_result.confidence,
-                    "raw_sign": pred_result.class_name,
+                    "raw_sign": pred_result.class_label,
                     "raw_confidence": pred_result.confidence,
                     "top_3": pred_result.top_k,
-                    "state": state_transition.current_state,
+                    "state": state_transition.state,
                     "hold_progress": state_transition.hold_progress,
-                    "committed_char": state_transition.committed_character,
+                    "committed_char": state_transition.emitted_char,
                     "fps": round(current_fps, 1),
                 }
 
@@ -780,7 +780,6 @@ class SignLanguageApp(tk.Tk):
                 # State colors
                 state_colors = {
                     GestureState.IDLE: ("#334155", "#cbd5e1"),
-                    GestureState.DETECTING: ("#1d4ed8", "#ffffff"),
                     GestureState.HOLDING: ("#d97706", "#ffffff"),
                     GestureState.COMMITTED: ("#059669", "#ffffff"),
                     GestureState.LOCKED: ("#7c3aed", "#ffffff"),

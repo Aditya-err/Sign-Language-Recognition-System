@@ -45,6 +45,11 @@ class SmoothedPrediction:
     is_stable: bool
     stability_score: float
 
+    @property
+    def class_name(self) -> Optional[str]:
+        """Compatibility alias for class_label."""
+        return self.class_label
+
 
 class PredictionSmoother:
     """

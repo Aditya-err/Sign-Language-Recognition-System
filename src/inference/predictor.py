@@ -60,6 +60,11 @@ class PredictionResult:
     top_k: List[Tuple[str, float]]
     raw_probabilities: Optional[np.ndarray] = None
 
+    @property
+    def class_name(self) -> Optional[str]:
+        """Compatibility alias for class_label."""
+        return self.class_label
+
 
 class SignPredictor:
     """

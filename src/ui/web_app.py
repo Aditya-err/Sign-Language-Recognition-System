@@ -11,6 +11,7 @@ It requires zero external web frameworks, using Python's standard library
 ThreadingHTTPServer to stream MJPEG frames and real-time telemetry.
 """
 
+import base64
 import json
 import logging
 import socket
@@ -80,6 +81,7 @@ class ISLWebService:
             "hold_progress": 0.0,
             "current_word": "",
             "sentence": "",
+            "image": "",
         }
 
         # Initialize text builder
@@ -150,8 +152,8 @@ class ISLWebService:
                 display_frame = cv2.flip(detection.annotated_image, 1)
 
                 # 6. If character committed, append to sentence
-                if state_trans.committed_character:
-                    self.text_builder.append_char(state_trans.committed_character)
+                if state_trans.emitted_char:
+                    self.text_builder.append_char(state_trans.emitted_char)
 
                 # 7. Compute FPS
                 fps_counter += 1
@@ -163,24 +165,31 @@ class ISLWebService:
 
                 # 8. Encode display frame to JPEG
                 _, buffer = cv2.imencode(
-                    ".jpg", display_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 80]
+                    ".jpg", display_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 70]
                 )
                 jpeg_bytes = buffer.tobytes()
+                b64_frame = base64.b64encode(jpeg_bytes).decode("ascii")
 
                 # 9. Update state thread-safely
                 with self.lock:
                     self.latest_jpeg = jpeg_bytes
+                    state_name = (
+                        state_trans.state.value
+                        if hasattr(state_trans.state, "value")
+                        else str(state_trans.state)
+                    )
                     self.telemetry = {
                         "fps": round(current_fps, 1),
-                        "hands_detected": detection.hands_detected,
-                        "sign": smoothed_result.class_name,
+                        "hands_detected": detection.hands_count,
+                        "sign": smoothed_result.class_label,
                         "confidence": round(smoothed_result.confidence, 3),
-                        "raw_sign": pred_result.class_name,
+                        "raw_sign": pred_result.class_label,
                         "top_3": pred_result.top_k,
-                        "state": state_trans.current_state.name,
+                        "state": state_name,
                         "hold_progress": round(state_trans.hold_progress, 2),
                         "current_word": self.text_builder.current_word,
                         "sentence": self.text_builder.get_text(),
+                        "image": b64_frame,
                     }
 
         except Exception as e:

@@ -49,6 +49,11 @@ class HandDetectionResult:
     right_landmarks: Optional[np.ndarray]
     annotated_image: np.ndarray
 
+    @property
+    def hands_detected(self) -> int:
+        """Compatibility alias for hands_count."""
+        return self.hands_count
+
 
 class HandDetector:
     """

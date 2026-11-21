@@ -25,6 +25,7 @@ The Architectural Solution:
 
 from dataclasses import dataclass
 import logging
+import sys
 from typing import Optional, Tuple
 
 import cv2
