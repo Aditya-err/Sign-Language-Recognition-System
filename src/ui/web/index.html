@@ -4,22 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Sign Language Recognition System V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #090a10;
-            --bg-card: rgba(18, 20, 30, 0.85);
-            --bg-card-hover: rgba(28, 32, 48, 0.9);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --accent-primary: #6366f1;
-            --accent-primary-hover: #4f46e5;
-            --accent-cyan: #06b6d4;
-            --accent-emerald: #10b981;
-            --accent-amber: #f59e0b;
-            --accent-rose: #ef4444;
-            --accent-purple: #a855f7;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --bg-base: #090d16;
+            --bg-surface: rgba(17, 24, 39, 0.72);
+            --bg-surface-elevated: rgba(30, 41, 59, 0.65);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(99, 102, 241, 0.35);
+            
+            --brand-primary: #3b82f6;
+            --brand-indigo: #6366f1;
+            --status-success: #10b981;
+            --status-warning: #f59e0b;
+            --status-danger: #ef4444;
+            --status-neutral: #64748b;
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
         }
 
         * {
@@ -30,16 +38,17 @@
         }
 
         body {
-            font-family: var(--font-family);
+            font-family: var(--font-sans);
             background-color: var(--bg-base);
-            color: var(--text-main);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 12% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 88% 90%, rgba(99, 102, 241, 0.06) 0%, transparent 45%);
+            -webkit-font-smoothing: antialiased;
         }
 
         /* HEADER */
@@ -47,366 +56,413 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 28px;
-            background: rgba(13, 15, 24, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-glass);
-            z-index: 10;
+            padding: 14px 32px;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 20;
         }
 
-        .brand-container {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .brand-logo {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            color: var(--brand-primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
         }
 
-        .brand-title {
-            font-size: 18px;
+        .brand-text h1 {
+            font-size: 16px;
             font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-
-        .brand-title span.badge {
-            font-size: 11px;
-            font-weight: 600;
-            background: rgba(99, 102, 241, 0.2);
-            color: #818cf8;
-            padding: 2px 8px;
-            border-radius: 20px;
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            margin-left: 6px;
-        }
-
-        .brand-subtitle {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .header-badges {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .badge-pill {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-weight: 600;
+            letter-spacing: -0.2px;
+            color: #ffffff;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
+        .version-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .telemetry-strip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .metric-pill strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background-color: var(--accent-emerald);
-            box-shadow: 0 0 8px var(--accent-emerald);
-            animation: pulse 2s infinite;
+            background-color: var(--status-success);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        /* MAIN CONTENT GRID */
+        /* MAIN CONTENT LAYOUT */
         main {
             flex: 1;
             display: grid;
             grid-template-columns: 1.15fr 0.85fr;
             gap: 24px;
-            padding: 24px 28px;
-            max-width: 1600px;
+            padding: 24px 32px;
+            max-width: 1680px;
             margin: 0 auto;
             width: 100%;
         }
 
-        @media (max-width: 1080px) {
+        @media (max-width: 1120px) {
             main {
                 grid-template-columns: 1fr;
+                padding: 18px 20px;
             }
         }
 
         /* GLASS CARD COMMON */
-        .glass-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glass);
-            border-radius: 18px;
-            padding: 20px;
+        .glass-panel {
+            background: var(--bg-surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            gap: 18px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
         }
 
-        .card-header {
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .card-title {
+        .panel-title {
             font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .panel-title svg {
+            color: var(--brand-primary);
+        }
+
         /* VIDEO STREAM CONTAINER */
-        .video-container {
+        .viewport-box {
             position: relative;
             width: 100%;
             aspect-ratio: 4 / 3;
-            background: #030407;
-            border-radius: 14px;
+            max-height: 480px;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: box-shadow 0.3s ease;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .video-container.holding {
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+        .viewport-box.holding {
             border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
         }
 
-        .video-container.committed {
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.45);
+        .viewport-box.committed {
             border-color: rgba(16, 185, 129, 0.6);
+            box-shadow: 0 0 28px rgba(16, 185, 129, 0.3);
         }
 
         #cameraStream {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform: scaleX(1); /* Backend handles mirror flip */
         }
 
-        .video-placeholder {
+        .loader-overlay {
             position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            color: var(--text-muted);
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
         }
 
-        .spinner {
-            width: 36px;
-            height: 36px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid var(--accent-primary);
+        .spinner-ring {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid var(--brand-primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.9s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .video-overlay-top {
+        .viewport-hud-top {
             position: absolute;
-            top: 14px;
-            left: 14px;
-            right: 14px;
+            top: 12px;
+            left: 12px;
+            right: 12px;
             display: flex;
             justify-content: space-between;
             pointer-events: none;
         }
 
-        .overlay-chip {
-            background: rgba(10, 12, 18, 0.7);
+        .hud-chip {
+            background: rgba(15, 23, 42, 0.78);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 6px;
             padding: 4px 10px;
             font-size: 11px;
             font-weight: 600;
             color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .video-controls {
+        .hud-chip-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--brand-primary);
+        }
+
+        .controls-toolbar {
             display: flex;
-            gap: 12px;
             align-items: center;
+            gap: 12px;
         }
 
         /* BUTTONS */
         .btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 7px 14px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-1px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.18);
         }
 
         .btn-primary {
-            background: var(--accent-primary);
-            border-color: transparent;
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: #ffffff;
         }
 
         .btn-primary:hover {
-            background: var(--accent-primary-hover);
-            box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+            background: #2563eb;
+            border-color: #2563eb;
         }
 
         .btn-danger {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.25);
             color: #fca5a5;
         }
 
         .btn-danger:hover {
-            background: var(--accent-rose);
-            color: #fff;
+            background: rgba(239, 68, 68, 0.22);
+            color: #ffffff;
         }
 
         .btn-success {
             background: rgba(16, 185, 129, 0.15);
-            border-color: rgba(16, 185, 129, 0.3);
+            border-color: rgba(16, 185, 129, 0.35);
             color: #6ee7b7;
         }
 
         .btn-success:hover {
-            background: var(--accent-emerald);
-            color: #fff;
+            background: rgba(16, 185, 129, 0.25);
+            color: #ffffff;
         }
 
-        /* TOGGLE SWITCH */
-        .toggle-label {
-            display: inline-flex;
+        .custom-toggle {
+            display: flex;
             align-items: center;
             gap: 8px;
             font-size: 12px;
-            color: var(--text-muted);
+            font-weight: 500;
+            color: var(--text-secondary);
             cursor: pointer;
-            user-select: none;
         }
 
-        /* RIGHT PANEL: RECOGNITION HERO */
-        .hero-prediction-box {
+        .custom-toggle input {
+            accent-color: var(--brand-primary);
+            cursor: pointer;
+        }
+
+        /* RECOGNITION HERO SECTION */
+        .hero-classifier {
             display: grid;
             grid-template-columns: 140px 1fr;
             gap: 20px;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border-subtle);
             border-radius: 14px;
-            padding: 16px;
+            padding: 18px;
+            align-items: center;
         }
 
-        .sign-glyph-container {
+        .glyph-container {
             width: 140px;
             height: 140px;
-            background: #0f111a;
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 72px;
-            font-weight: 800;
-            color: #38bdf8;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: all 0.2s;
-        }
-
-        .state-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            font-family: var(--font-mono);
+            font-size: 76px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            width: fit-content;
-            margin-bottom: 8px;
+            color: #ffffff;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+            transition: color 0.15s ease;
         }
 
-        .state-idle { background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.3); }
-        .state-detecting { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .state-holding { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); animation: pulse 1s infinite; }
-        .state-committed { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
-        .state-locked { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-
-        /* PROGRESS BARS */
-        .progress-group {
+        .classifier-metrics {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-top: 6px;
+            gap: 14px;
         }
 
-        .progress-header {
+        .state-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .state-tag {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .state-idle {
+            background: rgba(100, 116, 139, 0.15);
+            color: #94a3b8;
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        .state-holding {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+
+        .state-committed {
+            background: rgba(16, 185, 129, 0.18);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .state-locked {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .meter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .meter-label {
             display: flex;
             justify-content: space-between;
             font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        .progress-bar-bg {
+        .meter-track {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .progress-bar-fill {
+        .meter-fill {
             height: 100%;
-            border-radius: 6px;
+            border-radius: 4px;
             transition: width 0.15s ease-out;
         }
 
-        .fill-conf {
-            background: linear-gradient(90deg, #38bdf8, #6366f1);
+        .fill-confidence {
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
         }
 
         .fill-hold {
@@ -414,156 +470,184 @@
         }
 
         /* TOP 3 HYPOTHESES */
-        .hypotheses-list {
+        .candidates-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
-        .hypo-card {
+        .candidate-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
             padding: 8px 12px;
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
 
-        .hypo-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #e2e8f0;
+        .candidate-head {
             display: flex;
             justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .candidate-rank {
+            color: var(--text-tertiary);
+            font-size: 10px;
+            font-weight: 700;
         }
 
         /* TEXT CONVERSATION BUFFER */
-        .word-bubble-row {
+        .buffer-meta-row {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            font-size: 13px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
-        .word-bubble {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fbbf24;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .active-word-badge {
+            background: rgba(245, 158, 11, 0.12);
             border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
         }
 
-        .sentence-textarea {
+        .text-output-area {
             width: 100%;
-            height: 90px;
-            background: #0b0d14;
-            border: 1px solid var(--border-glass);
+            height: 100px;
+            background: #090d16;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
             padding: 12px 14px;
-            color: var(--text-main);
-            font-family: inherit;
+            color: #ffffff;
+            font-family: var(--font-mono);
             font-size: 14px;
+            line-height: 1.6;
             resize: none;
             outline: none;
-            line-height: 1.5;
-            transition: border-color 0.2s;
+            transition: border-color 0.15s ease;
         }
 
-        .sentence-textarea:focus {
-            border-color: var(--accent-primary);
+        .text-output-area:focus {
+            border-color: rgba(99, 102, 241, 0.4);
         }
 
-        .sentence-actions {
+        .actions-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .sentence-btn-group {
+        .actions-cluster {
             display: flex;
             gap: 8px;
         }
 
-        /* SLIDERS */
-        .settings-grid {
+        /* SETTINGS & SLIDERS */
+        .tuning-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
+            padding-top: 4px;
         }
 
-        .slider-control {
+        .slider-block {
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
-        .slider-header {
+        .slider-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .slider-meta span.val {
+            color: var(--brand-primary);
+            font-weight: 600;
+            font-family: var(--font-mono);
         }
 
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
-            height: 6px;
-            border-radius: 5px;
+            height: 4px;
+            border-radius: 2px;
             background: rgba(255, 255, 255, 0.1);
             outline: none;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: var(--accent-primary);
+            background: #3b82f6;
             cursor: pointer;
-            box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+            transition: transform 0.1s ease;
         }
 
-        /* REFERENCE DRAWER */
-        .reference-panel {
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.6;
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* INSTRUCTION FOOTNOTE */
+        .info-callout {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.5;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
-            padding: 12px 16px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
         }
 
-        .reference-panel strong {
+        .info-callout svg {
+            flex-shrink: 0;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .info-callout strong {
             color: #cbd5e1;
         }
 
-        .unsupported-tag {
-            color: #f87171;
-            font-weight: 600;
-        }
-
-        /* TOAST NOTIFICATION */
+        /* TOAST */
         #toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: var(--accent-emerald);
-            color: #fff;
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
             padding: 10px 18px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transform: translateY(12px);
+            transition: all 0.25s ease;
             pointer-events: none;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         #toast.show {
@@ -574,150 +658,230 @@
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- APPLICATION HEADER -->
     <header>
-        <div class="brand-container">
-            <div class="brand-logo">✋</div>
-            <div>
-                <div class="brand-title">Indian Sign Language AI <span class="badge">V2.0 Engine</span></div>
-                <div class="brand-subtitle">Real-Time MediaPipe Hands + 126-D Normalization + Deep MLP</div>
+        <div class="brand">
+            <div class="brand-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>Indian Sign Language Recognition <span class="version-badge">v2.0</span></h1>
+                <p>Real-Time Dual-Hand Computer Vision & Inference System</p>
             </div>
         </div>
 
-        <div class="header-badges">
-            <div class="badge-pill">
-                <div class="status-dot"></div>
+        <div class="telemetry-strip">
+            <div class="metric-pill">
+                <div class="status-indicator"></div>
                 <span id="headerFps">FPS: --</span>
             </div>
-            <div class="badge-pill">
-                <span style="color: #38bdf8;">⚡ Latency:</span> 0.31 ms
+            <div class="metric-pill">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>Latency: <strong>0.31 ms</strong></span>
             </div>
-            <div class="badge-pill">
-                <span style="color: #a855f7;">🎯 Param:</span> 28.5k MLP
+            <div class="metric-pill">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                </svg>
+                <span>Model: <strong>28.5k MLP</strong></span>
             </div>
         </div>
     </header>
 
-    <!-- MAIN BODY -->
+    <!-- MAIN TWO-COLUMN WORKSPACE -->
     <main>
-        <!-- LEFT COLUMN: LIVE VIDEO & VISION CONTROLS -->
-        <section class="glass-card">
-            <div class="card-header">
-                <div class="card-title">Live Vision Sensor (640x480)</div>
-                <div class="video-controls">
-                    <label class="toggle-label">
+        <!-- LEFT COLUMN: LIVE VIDEO SENSOR & VISION CONTROLS -->
+        <section class="glass-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Optical Sensor (640x480)
+                </div>
+                <div class="controls-toolbar">
+                    <label class="custom-toggle">
                         <input type="checkbox" id="chkMesh" checked onchange="toggleMesh()">
-                        Draw Hand Mesh
+                        Draw Landmark Mesh
                     </label>
-                    <button class="btn" id="btnPause" onclick="togglePause()">Pause AI</button>
+                    <button class="btn" id="btnPause" onclick="togglePause()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                        Pause
+                    </button>
                 </div>
             </div>
 
-            <!-- Video Stream Container -->
-            <div class="video-container" id="videoBox">
-                <div class="video-placeholder" id="videoLoader">
-                    <div class="spinner"></div>
-                    <div>Connecting camera & MediaPipe...</div>
+            <!-- CAMERA VIEWPORT -->
+            <div class="viewport-box" id="videoBox">
+                <div class="loader-overlay" id="videoLoader">
+                    <div class="spinner-ring"></div>
+                    <div>Initializing Camera & MediaPipe...</div>
                 </div>
-                <img id="cameraStream" src="" alt="Webcam Feed">
+                <img id="cameraStream" src="" alt="Live Video Sensor">
                 
-                <div class="video-overlay-top">
-                    <div class="overlay-chip" id="chipHands">Hands: 0 detected</div>
-                    <div class="overlay-chip">DirectShow Fast I/O</div>
+                <div class="viewport-hud-top">
+                    <div class="hud-chip">
+                        <div class="hud-chip-dot"></div>
+                        <span id="chipHands">Hands: 0</span>
+                    </div>
+                    <div class="hud-chip">
+                        DirectShow Fast I/O
+                    </div>
                 </div>
             </div>
 
-            <!-- Quick Instructions -->
-            <div class="reference-panel">
-                <strong>Gesture Guide:</strong> Sit 0.8m–1.2m from camera. Hold sign steady for ~0.8s until hold bar fills to commit character.
-                <br>
-                <strong>Supported (35 classes):</strong> Digits 1–9 | Alphabets A–Z | <span class="unsupported-tag">Digit 0 Unsupported (absent from dataset)</span>
+            <!-- INSTRUCTION FOOTNOTE -->
+            <div class="info-callout">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <div>
+                    <strong>ISL Formulation Note:</strong> Digits 1–9 use single-hand formations. Most alphabetic letters (A, B, D, M, N...) require two-handed formations. Hold each sign steady for 0.8s to commit to the sentence buffer.
+                </div>
             </div>
         </section>
 
-        <!-- RIGHT COLUMN: AI RECOGNITION & TEXT ASSEMBLY -->
-        <section class="glass-card">
-            <div class="card-header">
-                <div class="card-title">Real-Time Gesture Classifier</div>
-                <div id="stateBadge" class="state-badge state-idle">IDLE</div>
+        <!-- RIGHT COLUMN: REAL-TIME RECOGNITION & TEXT ASSEMBLY -->
+        <section class="glass-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                    </svg>
+                    Real-Time Classification
+                </div>
+                <div id="stateBadge" class="state-tag state-idle">IDLE</div>
             </div>
 
-            <!-- Hero Recognition Box -->
-            <div class="hero-prediction-box">
-                <div class="sign-glyph-container" id="signGlyph">—</div>
-                <div>
-                    <div class="progress-group">
-                        <div class="progress-header">
-                            <span>Classification Confidence</span>
-                            <span id="txtConf">0.0%</span>
+            <!-- HERO RECOGNITION CARD -->
+            <div class="hero-classifier">
+                <div class="glyph-container" id="signGlyph">—</div>
+                <div class="classifier-metrics">
+                    <div class="meter-group">
+                        <div class="meter-label">
+                            <span>Top Hypothesis Confidence</span>
+                            <span id="txtConf" style="font-weight: 600; color: #ffffff;">0.0%</span>
                         </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill fill-conf" id="barConf" style="width: 0%;"></div>
+                        <div class="meter-track">
+                            <div class="meter-fill fill-confidence" id="barConf" style="width: 0%;"></div>
                         </div>
                     </div>
 
-                    <div class="progress-group" style="margin-top: 14px;">
-                        <div class="progress-header">
+                    <div class="meter-group">
+                        <div class="meter-label">
                             <span>Commit Hold Progress</span>
-                            <span id="txtHold">0%</span>
+                            <span id="txtHold" style="font-weight: 600; color: #ffffff;">0%</span>
                         </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill fill-hold" id="barHold" style="width: 0%;"></div>
+                        <div class="meter-track">
+                            <div class="meter-fill fill-hold" id="barHold" style="width: 0%;"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Top-3 Hypotheses -->
-            <div class="hypotheses-list">
-                <div class="hypo-card">
-                    <div class="hypo-label"><span>#1</span> <span id="h1Name">—</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h1Bar" style="width: 0%;"></div></div>
+            <!-- TOP 3 HYPOTHESES -->
+            <div class="candidates-grid">
+                <div class="candidate-card">
+                    <div class="candidate-head">
+                        <span id="h1Name">—</span>
+                        <span class="candidate-rank">#1</span>
+                    </div>
+                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h1Bar" style="width: 0%;"></div></div>
                 </div>
-                <div class="hypo-card">
-                    <div class="hypo-label"><span>#2</span> <span id="h2Name">—</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h2Bar" style="width: 0%;"></div></div>
+                <div class="candidate-card">
+                    <div class="candidate-head">
+                        <span id="h2Name">—</span>
+                        <span class="candidate-rank">#2</span>
+                    </div>
+                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h2Bar" style="width: 0%;"></div></div>
                 </div>
-                <div class="hypo-card">
-                    <div class="hypo-label"><span>#3</span> <span id="h3Name">—</span></div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h3Bar" style="width: 0%;"></div></div>
+                <div class="candidate-card">
+                    <div class="candidate-head">
+                        <span id="h3Name">—</span>
+                        <span class="candidate-rank">#3</span>
+                    </div>
+                    <div class="meter-track"><div class="meter-fill fill-confidence" id="h3Bar" style="width: 0%;"></div></div>
                 </div>
             </div>
 
-            <!-- Sentence Construction Buffer -->
-            <div class="card-header" style="margin-top: 8px;">
-                <div class="card-title">Text Conversation Buffer</div>
-                <div class="word-bubble-row">
-                    <span>Word:</span>
-                    <span class="word-bubble" id="currentWord">—</span>
+            <!-- TEXT CONVERSATION BUFFER -->
+            <div class="buffer-meta-row">
+                <div class="panel-title" style="margin-bottom: 0;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                        <line x1="9" y1="20" x2="15" y2="20"></line>
+                        <line x1="12" y1="4" x2="12" y2="20"></line>
+                    </svg>
+                    Text Buffer
+                </div>
+                <div>
+                    Current Word: <span class="active-word-badge" id="currentWord">—</span>
                 </div>
             </div>
 
-            <textarea class="sentence-textarea" id="sentenceText" placeholder="Committed gestures will assemble here into complete words and sentences..." readonly></textarea>
+            <textarea class="text-output-area" id="sentenceText" placeholder="Committed gestures will assemble here sequentially..." readonly></textarea>
 
-            <div class="sentence-actions">
-                <div class="sentence-btn-group">
-                    <button class="btn btn-primary" onclick="sendAction('space')">Space</button>
-                    <button class="btn" onclick="sendAction('backspace')">Backspace</button>
-                    <button class="btn btn-danger" onclick="sendAction('clear')">Clear</button>
+            <div class="actions-row">
+                <div class="actions-cluster">
+                    <button class="btn btn-primary" onclick="sendAction('space')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 18h16"></path>
+                        </svg>
+                        Space
+                    </button>
+                    <button class="btn" onclick="sendAction('backspace')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                            <line x1="18" y1="9" x2="12" y2="15"></line>
+                            <line x1="12" y1="9" x2="18" y2="15"></line>
+                        </svg>
+                        Backspace
+                    </button>
+                    <button class="btn btn-danger" onclick="sendAction('clear')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Clear
+                    </button>
                 </div>
-                <button class="btn btn-success" onclick="copyClipboard()">Copy to Clipboard</button>
+                <button class="btn btn-success" onclick="copyClipboard()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy to Clipboard
+                </button>
             </div>
 
-            <!-- Real-Time Tuning Sliders -->
-            <div class="card-title" style="margin-top: 10px;">Sensitivity & Hold Tuning</div>
-            <div class="settings-grid">
-                <div class="slider-control">
-                    <div class="slider-header">
+            <!-- TUNING CONTROLS -->
+            <div class="tuning-grid">
+                <div class="slider-block">
+                    <div class="slider-meta">
                         <span>Confidence Threshold</span>
-                        <span id="lblThresh">0.70</span>
+                        <span class="val" id="lblThresh">0.70</span>
                     </div>
-                    <input type="range" id="rngThresh" min="0.50" max="0.95" step="0.05" value="0.70" oninput="updateSliders()">
+                    <input type="range" id="rngThresh" min="0.45" max="0.95" step="0.05" value="0.70" oninput="updateSliders()">
                 </div>
-                <div class="slider-control">
-                    <div class="slider-header">
-                        <span>Hold Duration</span>
-                        <span id="lblHold">12f (~0.8s)</span>
+                <div class="slider-block">
+                    <div class="slider-meta">
+                        <span>Commit Hold Time</span>
+                        <span class="val" id="lblHold">12f (~0.8s)</span>
                     </div>
                     <input type="range" id="rngHold" min="5" max="25" step="1" value="12" oninput="updateSliders()">
                 </div>
@@ -725,14 +889,18 @@
         </section>
     </main>
 
-    <!-- TOAST -->
-    <div id="toast">Copied to clipboard!</div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="toastMsg">Copied to clipboard!</span>
+    </div>
 
     <script>
         let isPaused = false;
         let isMeshEnabled = true;
 
-        // Telemetry Polling Loop (every 35ms ~28 FPS)
         async function pollTelemetry() {
             try {
                 const res = await fetch('/api/telemetry');
@@ -748,36 +916,37 @@
         }
 
         function updateUI(data) {
-            // Hide loader as soon as camera frame arrives
+            // Remove video loader once frame arrives
             const loader = document.getElementById('videoLoader');
             if (loader && data.image) {
                 loader.style.display = 'none';
             }
 
-            // Update live video frame from Base64
+            // Stream base64 image
             if (data.image) {
                 document.getElementById('cameraStream').src = 'data:image/jpeg;base64,' + data.image;
             }
 
-            // 1. Badges & FPS
-            document.getElementById('headerFps').innerText = `FPS: ${data.fps}`;
-            document.getElementById('chipHands').innerText = `Hands: ${data.hands_detected} detected`;
+            // Header Telemetry
+            document.getElementById('headerFps').innerText = `FPS: ${data.fps.toFixed(1)}`;
+            document.getElementById('chipHands').innerText = `Hands: ${data.hands_detected}`;
 
-            // 2. Active Sign
+            // Hero Glyph
             const glyph = document.getElementById('signGlyph');
             glyph.innerText = data.sign || '—';
 
-            // 3. State Badge & Box Glow
+            // State Badge & Viewport Glow
             const stateBadge = document.getElementById('stateBadge');
             const videoBox = document.getElementById('videoBox');
-            stateBadge.className = 'state-badge state-' + data.state.toLowerCase();
-            stateBadge.innerText = data.state;
+            const stateStr = data.state || 'IDLE';
+            stateBadge.className = 'state-tag state-' + stateStr.toLowerCase();
+            stateBadge.innerText = stateStr;
 
             videoBox.classList.remove('holding', 'committed');
-            if (data.state === 'HOLDING') videoBox.classList.add('holding');
-            if (data.state === 'COMMITTED') videoBox.classList.add('committed');
+            if (stateStr === 'HOLDING') videoBox.classList.add('holding');
+            if (stateStr === 'COMMITTED') videoBox.classList.add('committed');
 
-            // 4. Progress Bars
+            // Progress Meters
             const confPct = Math.round(data.confidence * 100);
             const holdPct = Math.round(data.hold_progress * 100);
             document.getElementById('txtConf').innerText = confPct + '%';
@@ -785,7 +954,7 @@
             document.getElementById('txtHold').innerText = holdPct + '%';
             document.getElementById('barHold').style.width = holdPct + '%';
 
-            // 5. Top 3 Hypotheses
+            // Top-3 Hypotheses
             const top3 = data.top_3 || [];
             if (top3[0]) {
                 document.getElementById('h1Name').innerText = `${top3[0][0]} (${Math.round(top3[0][1]*100)}%)`;
@@ -800,7 +969,7 @@
                 document.getElementById('h3Bar').style.width = Math.round(top3[2][1]*100) + '%';
             }
 
-            // 6. Sentence Buffer & Word
+            // Sentence Buffer
             document.getElementById('currentWord').innerText = data.current_word || '—';
             const txtArea = document.getElementById('sentenceText');
             if (txtArea.value !== data.sentence) {
@@ -819,7 +988,9 @@
 
         async function togglePause() {
             isPaused = !isPaused;
-            document.getElementById('btnPause').innerText = isPaused ? 'Resume AI' : 'Pause AI';
+            document.getElementById('btnPause').innerHTML = isPaused 
+                ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Resume'
+                : '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Pause';
             await fetch('/api/control', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -860,12 +1031,11 @@
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
-            toast.innerText = msg;
+            document.getElementById('toastMsg').innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => toast.classList.remove('show'), 2200);
         }
 
-        // Start polling on load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', pollTelemetry);
         } else {

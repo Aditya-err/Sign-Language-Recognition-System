@@ -179,23 +179,30 @@ class SignPredictor:
             probs_tensor = self.model(x_tensor, training=False)
             probs = probs_tensor.numpy()[0]
         else:
-            # Single-hand agnostic evaluation:
-            # Evaluates the active hand in both Left and Right slots to accommodate both
-            # left- and right-handed signers as well as hybrid single-hand dataset entries.
+            # Single-hand evaluation with slot priority:
             hand_type = "left_only" if left_present else "right_only"
-            
+
+            # Primary pass in detected slot:
             x1 = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
             probs1 = self.model(x1, training=False).numpy()[0]
 
-            feat_swapped = np.zeros(DUAL_HAND_FEATURE_DIM, dtype=np.float32)
-            if left_present:
-                feat_swapped[63:] = feat_flat[:63]
+            # If primary slot has solid confidence (>= 0.60), preserve it.
+            # This prevents true right-hand signs (like digit '2') from being
+            # hijacked by identical handshapes in opposite slots (like 'V').
+            if float(np.max(probs1)) >= 0.60:
+                probs = probs1
             else:
-                feat_swapped[:63] = feat_flat[63:]
-            x2 = tf.convert_to_tensor(feat_swapped.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
-            probs2 = self.model(x2, training=False).numpy()[0]
+                # If primary slot confidence is low (< 0.60), evaluate swapped slot
+                # to support hybrid dataset classes (e.g. 'C', 'V') or mirrored handedness.
+                feat_swapped = np.zeros(DUAL_HAND_FEATURE_DIM, dtype=np.float32)
+                if left_present:
+                    feat_swapped[63:] = feat_flat[:63]
+                else:
+                    feat_swapped[:63] = feat_flat[63:]
+                x2 = tf.convert_to_tensor(feat_swapped.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
+                probs2 = self.model(x2, training=False).numpy()[0]
 
-            probs = probs2 if np.max(probs2) > np.max(probs1) else probs1
+                probs = probs2 if np.max(probs2) > np.max(probs1) else probs1
 
         top_idx = int(np.argmax(probs))
         confidence = float(probs[top_idx])
