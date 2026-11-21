@@ -89,7 +89,13 @@ class WebcamManager:
         self.mirror_display = mirror_display
 
         logger.info("Initializing webcam at device index %d...", camera_index)
-        self.cap = cv2.VideoCapture(camera_index)
+        if sys.platform.startswith("win"):
+            self.cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+            if not self.cap.isOpened():
+                logger.info("CAP_DSHOW fallback to default backend for camera index %d...", camera_index)
+                self.cap = cv2.VideoCapture(camera_index)
+        else:
+            self.cap = cv2.VideoCapture(camera_index)
 
         if not self.cap.isOpened():
             logger.error("Failed to open webcam at index %d", camera_index)

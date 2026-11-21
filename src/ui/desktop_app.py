@@ -217,6 +217,7 @@ class SignLanguageApp(tk.Tk):
         self.worker: Optional[InferenceWorker] = None
         self.is_camera_running = False
         self.is_recognition_paused = False
+        self._canvas_img_id = None
 
         # GUI Styling
         self._setup_styles()
@@ -359,6 +360,15 @@ class SignLanguageApp(tk.Tk):
             height=480,
         )
         self.video_canvas.pack(padx=8, pady=8, fill=tk.BOTH, expand=True)
+        self.video_canvas.create_text(
+            320,
+            240,
+            text="Initializing Camera & AI Engine...\nPlease wait a moment.",
+            fill="#94a3b8",
+            font=("Segoe UI", 13),
+            justify=tk.CENTER,
+            tags="placeholder",
+        )
 
         # Video Toolbar
         v_tool = ttk.Frame(video_card, style="Card.TFrame")
@@ -652,6 +662,7 @@ class SignLanguageApp(tk.Tk):
         self.is_camera_running = False
         self.btn_camera.config(text="Start Camera")
         self.video_canvas.delete("all")
+        self._canvas_img_id = None
         self.lbl_predicted_sign.config(text="—")
         self.lbl_state.config(text="STOPPED", bg="#475569")
 
@@ -719,9 +730,15 @@ class SignLanguageApp(tk.Tk):
                 rgb_frame = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
                 h, w = rgb_frame.shape[:2]
 
+                # Remove placeholder once first frame arrives
+                self.video_canvas.delete("placeholder")
+
                 # Resize to canvas dimensions if needed
                 canvas_w = self.video_canvas.winfo_width()
                 canvas_h = self.video_canvas.winfo_height()
+                if canvas_w <= 50 or canvas_h <= 50:
+                    canvas_w, canvas_h = 640, 480
+
                 if canvas_w > 50 and canvas_h > 50 and (canvas_w != w or canvas_h != h):
                     # Aspect ratio preserving fit
                     scale = min(canvas_w / w, canvas_h / h)
@@ -730,9 +747,16 @@ class SignLanguageApp(tk.Tk):
 
                 img_pil = Image.fromarray(rgb_frame)
                 img_tk = ImageTk.PhotoImage(image=img_pil)
-                self.video_canvas.create_image(
-                    canvas_w // 2, canvas_h // 2, anchor=tk.CENTER, image=img_tk
-                )
+
+                # Re-use canvas item to prevent memory leak and slow re-draw
+                if self._canvas_img_id is None:
+                    self._canvas_img_id = self.video_canvas.create_image(
+                        canvas_w // 2, canvas_h // 2, anchor=tk.CENTER, image=img_tk
+                    )
+                else:
+                    self.video_canvas.coords(self._canvas_img_id, canvas_w // 2, canvas_h // 2)
+                    self.video_canvas.itemconfig(self._canvas_img_id, image=img_tk)
+
                 self._current_img = img_tk  # Keep reference to prevent GC
 
                 # 2. Update Telemetry Badges
