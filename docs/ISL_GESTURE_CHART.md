@@ -1,4 +1,4 @@
-# Indian Sign Language (ISL) 35-Class Real-Time Gesture Reference Guide
+# 🤟 Indian Sign Language (ISL) 35-Class Real-Time Gesture Reference Guide
 
 This document provides a practical, step-by-step visual reference for every gesture recognized by the **Indian Sign Language (ISL) Recognition System V2**.
 
@@ -30,10 +30,10 @@ In Indian Sign Language, counting digits 1–9 is performed using a single hand 
 | **`3`** | Right Hand | **Index, Middle, and Ring fingers** extended UP; pinky folded, thumb over pinky. |
 | **`4`** | Right Hand | **Four fingers** (Index, Middle, Ring, Pinky) extended UP; thumb tucked across palm. |
 | **`5`** | Right Hand | **All 5 fingers** fully extended and spread outward facing the camera. |
-| **`6`** | Right Hand | Make a fist with only the **Thumb** extended outward (or thumb + pinky). |
-| **`7`** | Right Hand | **Thumb and Index finger** touching or extended forward; remaining fingers curled. |
-| **`8`** | Right Hand | **Index, Middle fingers + Thumb** extended forward together. |
-| **`9`** | Right Hand | **Index finger curved** like a hook (or closed fist with little finger and ring extended). |
+| **`6`** | Right Hand | Make a fist with only the **Pinky (little finger)** extended UP. *(Standard Asian fingerspelling counting)*. |
+| **`7`** | Right Hand | **Thumb and Index finger** extended forward/upward forming an 'L'; remaining 3 fingers curled. |
+| **`8`** | Right Hand | **Index, Middle fingers + Thumb** extended outward together; ring and pinky curled. |
+| **`9`** | Right Hand | **Thumb only extended UP** (thumbs-up / hitchhiker gesture); all 4 fingers curled into a fist. |
 | **`0`** | *Unsupported* | **Absent from training dataset** — deliberately documented as unsupported. |
 
 ---
@@ -45,14 +45,18 @@ These letters only require **one hand** (dominant hand) in front of the camera:
 | Letter | Hand Shape | Detailed Finger Configuration |
 | :---: | :--- | :--- |
 | **`C`** | Cup Curve | Curve all four fingers and thumb into a clear "**C**" arc facing sideways. |
+| **`H`** | Horizontal Cut | Hand flat, fingers extended horizontally across chest. |
 | **`I`** | Little Finger | Closed fist with only the **Pinky (little finger)** pointing straight UP. |
+| **`J`** | Pinky Hook | Pinky extended, drawing a small downwards curve/hook in the air. |
 | **`L`** | Right Angle | **Thumb** pointing sideways, **Index** pointing straight UP ($90^\circ$ "L" shape). |
 | **`O`** | Circle Ring | All four fingertips curved to touch the tip of the thumb, making an "**O**". |
-| **`V`** | Peace Sign | **Index and Middle** fingers extended upward and spread into a "**V**". |
-| **`Y`** | Phone / Hang Loose | **Thumb and Pinky** extended outward; middle 3 fingers folded into fist. |
-| **`H`** | Horizontal Cut | Hand flat, fingers extended horizontally across chest. |
 | **`P`** | Downward Loop | Index finger pointed downward with thumb touching first knuckle. |
-| **`U`** | Two Fingers Closed | Index and Middle fingers extended straight UP touching side-by-side (unlike V). |
+| **`Q`** | Downward Hook | Hand pointing downward forming an open pincher/hook shape. |
+| **`R`** | Crossed Fingers | Index and Middle fingers crossed over each other ("fingers crossed" for good luck). |
+| **`S`** | Closed Fist | Tight closed fist facing the camera with thumb wrapped over fingers. |
+| **`U`** | Two Fingers Touching | Index and Middle fingers extended straight UP touching side-by-side (parallel 'U'). |
+| **`V`** | Peace Sign | **Index and Middle** fingers extended upward and spread into a wide "**V**". |
+| **`W`** | Three Fingers Spread | **Index, Middle, and Ring** fingers spread open in a "**W**" shape. |
 | **`Z`** | Zig-Zag Pose | Index finger extended pointing diagonally forward/up. |
 
 ---
@@ -80,21 +84,22 @@ In ISL, the 5 vowels are formed by touching the fingertips of the passive Left H
 | **`K`** | Angle Touch | Left index held vertical; Right index bent at knuckle touching the side of Left index. |
 | **`M`** | Three Legs | Left hand flat palm up; Right hand places **3 fingers** (Index, Middle, Ring) down on Left palm. |
 | **`N`** | Two Legs | Left hand flat palm up; Right hand places **2 fingers** (Index, Middle) down on Left palm. |
-| **`S`** | Interlocked Pinkies | Left and Right pinkies hooked together, or Right fist resting on Left fist. |
 | **`T`** | T-Intersection | Left hand held flat vertically; **Right index finger touches the edge** forming a "**T**". |
-| **`W`** | Interlocked Fingers | Both hands with fingers interlocked and spread upward, forming "**W**". |
 | **`X`** | Cross Bones | Both index fingers crossed over each other at $90^\circ$ forming an "**X**". |
+| **`Y`** | Web Touch | Left hand flat palm; Right index finger placed in the cleft between Left thumb and index finger. |
 
 ---
 
 ## 🎯 Best Real-World Operating Tips
 
-1. **Distance:** Sit **0.8m to 1.2m** away from the camera so your hands and chest are clearly in frame.
-2. **Lighting:** Avoid sitting with a bright window behind you (backlighting). Front lighting gives MediaPipe the clearest hand contours.
-3. **The 0.8s Commit Hold:**
-   * When you form a sign, the UI shows **`HOLDING`** (yellow).
-   * Keep your hand still for **0.8 seconds** (~12 frames) until the progress bar fills to 100%.
-   * The character commits to the sentence buffer and turns **`COMMITTED`** (green), then **`LOCKED`** (purple).
-4. **Typing Words:**
-   * To type `CAT`: Hold `C` $\to$ relax hand $\to$ hold `A` $\to$ relax hand $\to$ hold `T`.
-   * Click **`[Space]`** to separate words!
+1. **Vocabulary Mode:**
+   - Testing Digits: Switch to `[Digits (1–9)]` mode.
+   - Testing Alphabets: Switch to `[Alphabets (A–Z)]` mode.
+2. **Distance:** Sit **0.8m to 1.2m** away from the camera so your hands and chest are clearly in frame.
+3. **Lighting:** Avoid sitting with a bright window behind you (backlighting). Front lighting gives MediaPipe the clearest hand contours.
+4. **The Commit Hold & Debounce:**
+   - Keep your hand still for **0.6 to 0.8 seconds** until the progress bar fills to 100% and flashes `COMMITTED`.
+   - Relax or lower your hand for **0.4 seconds** before raising it for the next character.
+5. **Typing Words:**
+   - To type `CAT`: Hold `C` $\to$ relax hand $\to$ hold `A` (two hands) $\to$ relax hand $\to$ hold `T` (two hands).
+   - Click **`[Space]`** to separate words!

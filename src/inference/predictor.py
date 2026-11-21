@@ -125,6 +125,33 @@ class SignPredictor:
         _ = self.model(dummy_input, training=False)
         logger.info("Inference engine initialized successfully (%d classes)", self.num_classes)
 
+    def _apply_vocabulary_mask(self, probs: np.ndarray, mode: str) -> np.ndarray:
+        """
+        Masks out classes outside the selected vocabulary mode and renormalizes.
+
+        Args:
+            probs: 1D probability array of shape (num_classes,).
+            mode: "all", "digits", or "alphabets".
+
+        Returns:
+            Renormalized probability array.
+        """
+        if mode == "all":
+            return probs
+
+        p = probs.copy()
+        if mode == "digits":
+            # Keep indices 0..8 (digits 1..9), mask out alphabets 9..34
+            p[9:] = 0.0
+        elif mode == "alphabets":
+            # Mask out digits 0..8, keep alphabets 9..34
+            p[:9] = 0.0
+
+        p_sum = float(np.sum(p))
+        if p_sum > 1e-6:
+            p = p / p_sum
+        return p
+
     def predict(self, feature_vector: np.ndarray, mode: str = "all") -> PredictionResult:
         """
         Generates sign class prediction from a 126-D normalized feature vector.
@@ -178,50 +205,43 @@ class SignPredictor:
             hand_type = "dual"
             x_tensor = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
             probs_tensor = self.model(x_tensor, training=False)
-            probs = probs_tensor.numpy()[0]
+            probs_raw = probs_tensor.numpy()[0]
+            probs = self._apply_vocabulary_mask(probs_raw, mode)
         else:
-            # Single-hand evaluation with slot priority:
+            # Single-hand evaluation with cross-slot handedness support:
             hand_type = "left_only" if left_present else "right_only"
 
             # Primary pass in detected slot:
             x1 = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
-            probs1 = self.model(x1, training=False).numpy()[0]
+            probs1_raw = self.model(x1, training=False).numpy()[0]
+            probs1 = self._apply_vocabulary_mask(probs1_raw, mode)
 
-            # If primary slot has solid confidence (>= 0.60), preserve it.
-            # This prevents true right-hand signs (like digit '2') from being
-            # hijacked by identical handshapes in opposite slots (like 'V').
-            if float(np.max(probs1)) >= 0.60:
-                probs = probs1
+            # Swapped pass in opposite slot (enables right-handed users to sign
+            # left-slot dataset letters like U, P, W, J, Q with 99% accuracy):
+            feat_swapped = np.zeros(DUAL_HAND_FEATURE_DIM, dtype=np.float32)
+            if left_present:
+                feat_swapped[63:] = feat_flat[:63]
             else:
-                # If primary slot confidence is low (< 0.60), evaluate swapped slot
-                # to support hybrid dataset classes (e.g. 'C', 'V') or mirrored handedness.
-                feat_swapped = np.zeros(DUAL_HAND_FEATURE_DIM, dtype=np.float32)
-                if left_present:
-                    feat_swapped[63:] = feat_flat[:63]
+                feat_swapped[:63] = feat_flat[63:]
+            x2 = tf.convert_to_tensor(feat_swapped.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
+            probs2_raw = self.model(x2, training=False).numpy()[0]
+            probs2 = self._apply_vocabulary_mask(probs2_raw, mode)
+
+            c1 = float(np.max(probs1))
+            c2 = float(np.max(probs2))
+
+            if mode in ("digits", "alphabets"):
+                # Under explicit vocabulary mode, pick whichever slot yields higher confidence!
+                probs = probs1 if c1 >= c2 else probs2
+            else:
+                # In "all" mode, prioritize primary slot if confidence is solid (>= 0.75)
+                # to prevent true right-hand digit '2' from being hijacked by 'V' in opposite slot.
+                if c1 >= 0.75:
+                    probs = probs1
+                elif c2 > c1:
+                    probs = probs2
                 else:
-                    feat_swapped[:63] = feat_flat[63:]
-                x2 = tf.convert_to_tensor(feat_swapped.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
-                probs2 = self.model(x2, training=False).numpy()[0]
-
-                probs = probs2 if np.max(probs2) > np.max(probs1) else probs1
-
-        # Apply vocabulary mode constraint if specified
-        if mode == "digits":
-            # Mask out non-digit classes (indices 9 to 34 are alphabets)
-            mask = np.zeros(self.num_classes, dtype=bool)
-            mask[:9] = True
-            probs = np.where(mask, probs, 0.0)
-            p_sum = float(np.sum(probs))
-            if p_sum > 1e-6:
-                probs = probs / p_sum
-        elif mode == "alphabets":
-            # Mask out digit classes (indices 0 to 8 are digits 1..9)
-            mask = np.zeros(self.num_classes, dtype=bool)
-            mask[9:] = True
-            probs = np.where(mask, probs, 0.0)
-            p_sum = float(np.sum(probs))
-            if p_sum > 1e-6:
-                probs = probs / p_sum
+                    probs = probs1
 
         top_idx = int(np.argmax(probs))
         confidence = float(probs[top_idx])

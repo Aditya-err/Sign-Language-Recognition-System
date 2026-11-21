@@ -91,6 +91,7 @@ class GestureStateManager:
         self.hold_count: int = 0
         self.cooldown_count: int = 0
         self.last_emitted_sign: Optional[str] = None
+        self.idle_frames_count: int = 0
 
     def update(self, smoothed: SmoothedPrediction) -> GestureStateOutput:
         """
@@ -105,8 +106,10 @@ class GestureStateManager:
         # Case 1: Hand lost or prediction unstable
         if not smoothed.is_stable or smoothed.class_label is None:
             self.reset_hold()
-            # If we were locked and hand dropped, return to IDLE
-            if self.state == GestureState.LOCKED:
+            self.idle_frames_count += 1
+            # Require at least 6 consecutive idle frames (~0.4s) before releasing the lock
+            # on the last emitted sign, preventing single-frame tracking flutter from emitting duplicate letters.
+            if self.state == GestureState.LOCKED and self.idle_frames_count >= 6:
                 self.state = GestureState.IDLE
                 self.last_emitted_sign = None
 
@@ -118,6 +121,7 @@ class GestureStateManager:
                 status_message="Show gesture to camera...",
             )
 
+        self.idle_frames_count = 0
         sign = smoothed.class_label
 
         # Case 2: In Cooldown
@@ -198,3 +202,4 @@ class GestureStateManager:
         self.hold_count = 0
         self.cooldown_count = 0
         self.last_emitted_sign = None
+        self.idle_frames_count = 0
