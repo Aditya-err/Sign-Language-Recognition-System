@@ -248,6 +248,27 @@ class RequestHandler(BaseHTTPRequestHandler):
                 data = json.dumps(self.service.telemetry)
             self.wfile.write(data.encode("utf-8"))
 
+        elif self.path.startswith("/signs/"):
+            # Serve sign reference images from web/static/signs or docs/dataset_samples
+            req_file = self.path[len("/signs/"):]
+            safe_name = Path(req_file).name
+            repo_root = Path(__file__).resolve().parents[2]
+            target_file = repo_root / "src" / "ui" / "web" / "static" / "signs" / safe_name
+            if not target_file.is_file():
+                target_file = repo_root / "docs" / "dataset_samples" / safe_name
+
+            if target_file.is_file():
+                self.send_response(200)
+                content_type = "image/png" if safe_name.lower().endswith(".png") else "image/jpeg"
+                self.send_header("Content-Type", content_type)
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.end_headers()
+                with open(target_file, "rb") as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
+
         else:
             self.send_response(404)
             self.end_headers()
