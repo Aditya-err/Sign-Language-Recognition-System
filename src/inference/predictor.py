@@ -175,15 +175,27 @@ class SignPredictor:
 
         if left_present and right_present:
             hand_type = "dual"
-        elif left_present:
-            hand_type = "left_only"
+            x_tensor = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
+            probs_tensor = self.model(x_tensor, training=False)
+            probs = probs_tensor.numpy()[0]
         else:
-            hand_type = "right_only"
+            # Single-hand agnostic evaluation:
+            # Evaluates the active hand in both Left and Right slots to accommodate both
+            # left- and right-handed signers as well as hybrid single-hand dataset entries.
+            hand_type = "left_only" if left_present else "right_only"
+            
+            x1 = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
+            probs1 = self.model(x1, training=False).numpy()[0]
 
-        # Direct tensor forward pass (avoids Keras predict overhead)
-        x_tensor = tf.convert_to_tensor(feat_flat.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
-        probs_tensor = self.model(x_tensor, training=False)
-        probs = probs_tensor.numpy()[0]
+            feat_swapped = np.zeros(DUAL_HAND_FEATURE_DIM, dtype=np.float32)
+            if left_present:
+                feat_swapped[63:] = feat_flat[:63]
+            else:
+                feat_swapped[:63] = feat_flat[63:]
+            x2 = tf.convert_to_tensor(feat_swapped.reshape(1, DUAL_HAND_FEATURE_DIM), dtype=tf.float32)
+            probs2 = self.model(x2, training=False).numpy()[0]
+
+            probs = probs2 if np.max(probs2) > np.max(probs1) else probs1
 
         top_idx = int(np.argmax(probs))
         confidence = float(probs[top_idx])
