@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Sign Language Recognition System V2</title>
+    <style>
+        :root {
+            --bg-base: #090a10;
+            --bg-card: rgba(18, 20, 30, 0.85);
+            --bg-card-hover: rgba(28, 32, 48, 0.9);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-primary: #6366f1;
+            --accent-primary-hover: #4f46e5;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #ef4444;
+            --accent-purple: #a855f7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 28px;
+            background: rgba(13, 15, 24, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
+            z-index: 10;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .brand-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-title span.badge {
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            margin-left: 6px;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .header-badges {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-emerald);
+            box-shadow: 0 0 8px var(--accent-emerald);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* MAIN CONTENT GRID */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 24px;
+            padding: 24px 28px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (max-width: 1080px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* GLASS CARD COMMON */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* VIDEO STREAM CONTAINER */
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: #030407;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .video-container.holding {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        .video-container.committed {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.45);
+            border-color: rgba(16, 185, 129, 0.6);
+        }
+
+        #cameraStream {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(1); /* Backend handles mirror flip */
+        }
+
+        .video-placeholder {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .video-overlay-top {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            right: 14px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .overlay-chip {
+            background: rgba(10, 12, 18, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* BUTTONS */
+        .btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            border-color: transparent;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-primary-hover);
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover {
+            background: var(--accent-rose);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+
+        .btn-success:hover {
+            background: var(--accent-emerald);
+            color: #fff;
+        }
+
+        /* TOGGLE SWITCH */
+        .toggle-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* RIGHT PANEL: RECOGNITION HERO */
+        .hero-prediction-box {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .sign-glyph-container {
+            width: 140px;
+            height: 140px;
+            background: #0f111a;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 72px;
+            font-weight: 800;
+            color: #38bdf8;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s;
+        }
+
+        .state-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            width: fit-content;
+            margin-bottom: 8px;
+        }
+
+        .state-idle { background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.3); }
+        .state-detecting { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
+        .state-holding { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); animation: pulse 1s infinite; }
+        .state-committed { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
+        .state-locked { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+        /* PROGRESS BARS */
+        .progress-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.15s ease-out;
+        }
+
+        .fill-conf {
+            background: linear-gradient(90deg, #38bdf8, #6366f1);
+        }
+
+        .fill-hold {
+            background: linear-gradient(90deg, #f59e0b, #10b981);
+        }
+
+        /* TOP 3 HYPOTHESES */
+        .hypotheses-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .hypo-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hypo-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* TEXT CONVERSATION BUFFER */
+        .word-bubble-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .word-bubble {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .sentence-textarea {
+            width: 100%;
+            height: 90px;
+            background: #0b0d14;
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+
+        .sentence-textarea:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .sentence-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sentence-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* SLIDERS */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .slider-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+        }
+
+        /* REFERENCE DRAWER */
+        .reference-panel {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .reference-panel strong {
+            color: #cbd5e1;
+        }
+
+        .unsupported-tag {
+            color: #f87171;
+            font-weight: 600;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--accent-emerald);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand-container">
+            <div class="brand-logo">✋</div>
+            <div>
+                <div class="brand-title">Indian Sign Language AI <span class="badge">V2.0 Engine</span></div>
+                <div class="brand-subtitle">Real-Time MediaPipe Hands + 126-D Normalization + Deep MLP</div>
+            </div>
+        </div>
+
+        <div class="header-badges">
+            <div class="badge-pill">
+                <div class="status-dot"></div>
+                <span id="headerFps">FPS: --</span>
+            </div>
+            <div class="badge-pill">
+                <span style="color: #38bdf8;">⚡ Latency:</span> 0.31 ms
+            </div>
+            <div class="badge-pill">
+                <span style="color: #a855f7;">🎯 Param:</span> 28.5k MLP
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <main>
+        <!-- LEFT COLUMN: LIVE VIDEO & VISION CONTROLS -->
+        <section class="glass-card">
+            <div class="card-header">
+                <div class="card-title">Live Vision Sensor (640x480)</div>
+                <div class="video-controls">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="chkMesh" checked onchange="toggleMesh()">
+                        Draw Hand Mesh
+                    </label>
+                    <button class="btn" id="btnPause" onclick="togglePause()">Pause AI</button>
+                </div>
+            </div>
+
+            <!-- Video Stream Container -->
+            <div class="video-container" id="videoBox">
+                <div class="video-placeholder" id="videoLoader">
+                    <div class="spinner"></div>
+                    <div>Connecting camera & MediaPipe...</div>
+                </div>
+                <img id="cameraStream" src="/video_feed" alt="Webcam Feed" onload="onStreamLoaded()">
+                
+                <div class="video-overlay-top">
+                    <div class="overlay-chip" id="chipHands">Hands: 0 detected</div>
+                    <div class="overlay-chip">DirectShow Fast I/O</div>
+                </div>
+            </div>
+
+            <!-- Quick Instructions -->
+            <div class="reference-panel">
+                <strong>Gesture Guide:</strong> Sit 0.8m–1.2m from camera. Hold sign steady for ~0.8s until hold bar fills to commit character.
+                <br>
+                <strong>Supported (35 classes):</strong> Digits 1–9 | Alphabets A–Z | <span class="unsupported-tag">Digit 0 Unsupported (absent from dataset)</span>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: AI RECOGNITION & TEXT ASSEMBLY -->
+        <section class="glass-card">
+            <div class="card-header">
+                <div class="card-title">Real-Time Gesture Classifier</div>
+                <div id="stateBadge" class="state-badge state-idle">IDLE</div>
+            </div>
+
+            <!-- Hero Recognition Box -->
+            <div class="hero-prediction-box">
+                <div class="sign-glyph-container" id="signGlyph">—</div>
+                <div>
+                    <div class="progress-group">
+                        <div class="progress-header">
+                            <span>Classification Confidence</span>
+                            <span id="txtConf">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-conf" id="barConf" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-group" style="margin-top: 14px;">
+                        <div class="progress-header">
+                            <span>Commit Hold Progress</span>
+                            <span id="txtHold">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-hold" id="barHold" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top-3 Hypotheses -->
+            <div class="hypotheses-list">
+                <div class="hypo-card">
+                    <div class="hypo-label"><span>#1</span> <span id="h1Name">—</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h1Bar" style="width: 0%;"></div></div>
+                </div>
+                <div class="hypo-card">
+                    <div class="hypo-label"><span>#2</span> <span id="h2Name">—</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h2Bar" style="width: 0%;"></div></div>
+                </div>
+                <div class="hypo-card">
+                    <div class="hypo-label"><span>#3</span> <span id="h3Name">—</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill fill-conf" id="h3Bar" style="width: 0%;"></div></div>
+                </div>
+            </div>
+
+            <!-- Sentence Construction Buffer -->
+            <div class="card-header" style="margin-top: 8px;">
+                <div class="card-title">Text Conversation Buffer</div>
+                <div class="word-bubble-row">
+                    <span>Word:</span>
+                    <span class="word-bubble" id="currentWord">—</span>
+                </div>
+            </div>
+
+            <textarea class="sentence-textarea" id="sentenceText" placeholder="Committed gestures will assemble here into complete words and sentences..." readonly></textarea>
+
+            <div class="sentence-actions">
+                <div class="sentence-btn-group">
+                    <button class="btn btn-primary" onclick="sendAction('space')">Space</button>
+                    <button class="btn" onclick="sendAction('backspace')">Backspace</button>
+                    <button class="btn btn-danger" onclick="sendAction('clear')">Clear</button>
+                </div>
+                <button class="btn btn-success" onclick="copyClipboard()">Copy to Clipboard</button>
+            </div>
+
+            <!-- Real-Time Tuning Sliders -->
+            <div class="card-title" style="margin-top: 10px;">Sensitivity & Hold Tuning</div>
+            <div class="settings-grid">
+                <div class="slider-control">
+                    <div class="slider-header">
+                        <span>Confidence Threshold</span>
+                        <span id="lblThresh">0.70</span>
+                    </div>
+                    <input type="range" id="rngThresh" min="0.50" max="0.95" step="0.05" value="0.70" oninput="updateSliders()">
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header">
+                        <span>Hold Duration</span>
+                        <span id="lblHold">12f (~0.8s)</span>
+                    </div>
+                    <input type="range" id="rngHold" min="5" max="25" step="1" value="12" oninput="updateSliders()">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- TOAST -->
+    <div id="toast">Copied to clipboard!</div>
+
+    <script>
+        let isPaused = false;
+        let isMeshEnabled = true;
+
+        function onStreamLoaded() {
+            document.getElementById('videoLoader').style.display = 'none';
+        }
+
+        // Telemetry Polling Loop (every 60ms)
+        async function pollTelemetry() {
+            try {
+                const res = await fetch('/api/telemetry');
+                if (!res.ok) return;
+                const data = await res.json();
+                updateUI(data);
+            } catch (err) {
+                // Ignore transient network errors
+            } finally {
+                setTimeout(pollTelemetry, 60);
+            }
+        }
+
+        function updateUI(data) {
+            // 1. Badges & FPS
+            document.getElementById('headerFps').innerText = `FPS: ${data.fps}`;
+            document.getElementById('chipHands').innerText = `Hands: ${data.hands_detected} detected`;
+
+            // 2. Active Sign
+            const glyph = document.getElementById('signGlyph');
+            glyph.innerText = data.sign || '—';
+
+            // 3. State Badge & Box Glow
+            const stateBadge = document.getElementById('stateBadge');
+            const videoBox = document.getElementById('videoBox');
+            stateBadge.className = 'state-badge state-' + data.state.toLowerCase();
+            stateBadge.innerText = data.state;
+
+            videoBox.classList.remove('holding', 'committed');
+            if (data.state === 'HOLDING') videoBox.classList.add('holding');
+            if (data.state === 'COMMITTED') videoBox.classList.add('committed');
+
+            // 4. Progress Bars
+            const confPct = Math.round(data.confidence * 100);
+            const holdPct = Math.round(data.hold_progress * 100);
+            document.getElementById('txtConf').innerText = confPct + '%';
+            document.getElementById('barConf').style.width = confPct + '%';
+            document.getElementById('txtHold').innerText = holdPct + '%';
+            document.getElementById('barHold').style.width = holdPct + '%';
+
+            // 5. Top 3 Hypotheses
+            const top3 = data.top_3 || [];
+            if (top3[0]) {
+                document.getElementById('h1Name').innerText = `${top3[0][0]} (${Math.round(top3[0][1]*100)}%)`;
+                document.getElementById('h1Bar').style.width = Math.round(top3[0][1]*100) + '%';
+            }
+            if (top3[1]) {
+                document.getElementById('h2Name').innerText = `${top3[1][0]} (${Math.round(top3[1][1]*100)}%)`;
+                document.getElementById('h2Bar').style.width = Math.round(top3[1][1]*100) + '%';
+            }
+            if (top3[2]) {
+                document.getElementById('h3Name').innerText = `${top3[2][0]} (${Math.round(top3[2][1]*100)}%)`;
+                document.getElementById('h3Bar').style.width = Math.round(top3[2][1]*100) + '%';
+            }
+
+            // 6. Sentence Buffer & Word
+            document.getElementById('currentWord').innerText = data.current_word || '—';
+            const txtArea = document.getElementById('sentenceText');
+            if (txtArea.value !== data.sentence) {
+                txtArea.value = data.sentence;
+                txtArea.scrollTop = txtArea.scrollHeight;
+            }
+        }
+
+        async function sendAction(action) {
+            await fetch('/api/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: action })
+            });
+        }
+
+        async function togglePause() {
+            isPaused = !isPaused;
+            document.getElementById('btnPause').innerText = isPaused ? 'Resume AI' : 'Pause AI';
+            await fetch('/api/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paused: isPaused })
+            });
+        }
+
+        async function toggleMesh() {
+            isMeshEnabled = document.getElementById('chkMesh').checked;
+            await fetch('/api/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ show_mesh: isMeshEnabled })
+            });
+        }
+
+        async function updateSliders() {
+            const thresh = parseFloat(document.getElementById('rngThresh').value);
+            const hold = parseInt(document.getElementById('rngHold').value);
+            
+            document.getElementById('lblThresh').innerText = thresh.toFixed(2);
+            document.getElementById('lblHold').innerText = `${hold}f (~${(hold/15).toFixed(1)}s)`;
+
+            await fetch('/api/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ threshold: thresh, hold_frames: hold })
+            });
+        }
+
+        function copyClipboard() {
+            const text = document.getElementById('sentenceText').value;
+            if (!text.trim()) return;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Copied to clipboard!");
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Start polling on load
+        window.onload = pollTelemetry;
+    </script>
+</body>
+</html>
