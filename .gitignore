@@ -87,6 +87,11 @@ wandb/
 *.png
 !reports/figures/.gitkeep
 !reports/figures/*.png
+!reports/figures/*.jpg
+!docs/dataset_samples/*.jpg
+!docs/dataset_samples/*.png
+!src/ui/web/static/signs/*.jpg
+!src/ui/web/static/signs/*.png
 
 # Testing and Profiling
 .pytest_cache/

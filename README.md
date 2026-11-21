@@ -1,16 +1,108 @@
 # Indian Sign Language (ISL) Recognition System V2
+### Production-Grade Real-Time Computer Vision & Neural Gesture Synthesis
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-orange.svg)](https://tensorflow.org)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands%200.10-teal.svg)](https://mediapipe.dev)
 [![Tests](https://img.shields.io/badge/Pytest-29%20Passed-brightgreen.svg)](tests/)
 [![Inference Latency](https://img.shields.io/badge/MLP%20Inference-0.31%20ms-success.svg)](reports/benchmark_300_frames.json)
-[![GUI](https://img.shields.io/badge/Desktop%20UI-Tkinter%20Thread--Safe-blueviolet.svg)](src/ui/desktop_app.py)
+[![UI](https://img.shields.io/badge/UI-Modern%20Glassmorphism%20Web--App-06b6d4.svg)](src/ui/web/index.html)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An industry-standard, high-performance **Real-Time Indian Sign Language (ISL) Recognition System** built with **MediaPipe Hands**, a mathematically proven **126-D dual-hand spatial normalizer**, an **optimized Deep MLP classifier** (28,515 parameters, 0.31 ms latency), and a **temporal stabilization state machine** with a decoupled, thread-safe desktop user interface.
+An industry-standard, high-performance **Real-Time Indian Sign Language (ISL) Recognition System** engineered with **MediaPipe Hands**, a mathematically proven **126-D dual-hand spatial normalizer**, an **optimized Deep MLP classifier** (28,515 parameters, 0.31 ms latency), and a **4-stage Finite State Machine (FSM)** with temporal smoothing and debounce stabilization. Features a **Cybernetic Glassmorphism Web Interface** with live HUD telemetry, in-app visual training reference guides, and vocabulary mode filtering.
 
 Developed as an MCA portfolio project adhering strictly to academic and engineering integrity standards.
+
+---
+
+## 📸 System Interface & Live HUD
+
+> *Note: Live demo recording / video showcase placeholder. Full interface screenshots will be featured here.*
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│  ❖ INDIAN SIGN LANGUAGE AI [v2.0 Neural]       [Cyber | Neural | Solar]  [Visual Guide]│
+├────────────────────────────────────────────┬───────────────────────────────────────────┤
+│                                            │  [All 35 Signs] [Digits 1–9] [Alpha A–Z]  │
+│   OPTICAL VISION SENSOR (DirectShow)       ├───────────────────────────────────────────┤
+│   ┌────────────────────────────────────┐   │  HERO PREDICTION DECK                     │
+│   │ ┌                                ┐ │   │  ┌───────┐ ┌─────────┐  Status: COMMITTED │
+│   │                                    │   │  │   A   │ │ Ref Img │  Conf:   █████ 96% │
+│   │         Live Mirrored Feed         │   │  └───────┘ └─────────┘  Hold:   █████ 100%│
+│   │                                    │   ├───────────────────────────────────────────┤
+│   │ └                                ┘ │   │  TEXT CONVERSATION BUFFER                 │
+│   └────────────────────────────────────┘   │  Current Word: HELLO                      │
+│   Hands: 2 | Latency: 0.31ms | FPS: 30.0   │  ┌─────────────────────────────────────┐ │
+│   [x] Landmark Mesh    [❚❚] Pause Camera   │  │ HELLO WORLD                         │ │
+│                                            │  └─────────────────────────────────────┘ │
+│                                            │  [Space] [Backspace] [Clear] [Copy Text]  │
+└────────────────────────────────────────────┴───────────────────────────────────────────┘
+```
+
+---
+
+## 🤟 Visual Gesture Reference Guide
+
+Indian Sign Language (ISL) uses both **Single-Handed** and **Dual-Handed** formations. Below are the **actual reference photos extracted from the training dataset (`archive.zip`)** used to train the neural network.
+
+### 1. Digits (1 to 9) — Single Hand (Dominant / Right)
+
+Digits 1–5 extend finger counts, while 6–9 use Asian fingerspelling standards:
+
+![ISL Digits 1 to 9 Reference Grid](docs/dataset_samples/grid_digits.jpg)
+
+| Digit | Pose Description | Finger Configuration |
+| :---: | :--- | :--- |
+| **`1`** | Single Index | **Index finger pointing straight UP**; all other fingers closed into a fist. |
+| **`2`** | Two Fingers | **Index + Middle fingers UP** in a "V" shape; thumb folded in. |
+| **`3`** | Three Fingers | **Index + Middle + Ring fingers UP**; pinky folded, thumb over pinky. |
+| **`4`** | Four Fingers | **Four fingers (Index, Middle, Ring, Pinky) UP**; thumb tucked across palm. |
+| **`5`** | Open Palm | **All 5 fingers spread wide open** facing the camera. |
+| **`6`** | Pinky Only | **Little finger (Pinky) pointing straight UP**; all other 4 fingers in a fist. |
+| **`7`** | Thumb + Index | **Thumb and Index extended outward** in an 'L' / gun shape. |
+| **`8`** | Thumb + 2 Fingers | **Thumb, Index, and Middle fingers extended** outward together. |
+| **`9`** | Thumb Only | **Thumb pointing straight UP** (thumbs-up gesture 👍); all 4 fingers curled into a fist. |
+
+---
+
+### 2. Dual-Handed Alphabets — Two Hands Required!
+
+> **Critical Linguistic Distinction:** In Indian Sign Language, letters like **A, B, D, E, G, K, M, N, T, X, Y** require **BOTH HANDS** in frame. The Left Hand serves as the passive base/paper, while the Right Hand serves as the active pointer.
+
+![ISL Dual-Hand Alphabets Reference Grid](docs/dataset_samples/grid_dual_alphabets.jpg)
+
+| Letter | Sign Name | Execution Guide (Both Hands in View) |
+| :---: | :--- | :--- |
+| **`A`** | Vowel: Thumb Touch | **Left hand open palm** facing user; **Right index touches Left Thumb tip**. |
+| **`B`** | Double Loop | Both hands form small circles (thumb + index touching) placed side-by-side like '8'. |
+| **`D`** | Lowercase 'd' | **Left index straight UP**; Right hand forms a curved arch touching top and bottom of Left index. |
+| **`E`** | Vowel: Index Touch | **Left hand open palm**; **Right index touches Left Index fingertip**. |
+| **`G`** | Double Fist | Both hands form closed fists; **Right fist placed on top of Left fist**. |
+| **`K`** | K-Angle | **Left index straight UP**; Right index bent at knuckle touching middle of Left index. |
+| **`M`** | Three Legs | **Left hand flat palm up**; Right hand places **3 fingers** (Index, Middle, Ring) down on Left palm. |
+| **`N`** | Two Legs | **Left hand flat palm up**; Right hand places **2 fingers** (Index, Middle) down on Left palm. |
+| **`T`** | T-Intersection | **Left hand held vertically**; Right index touches the edge of Left hand to form a 'T'. |
+| **`X`** | Cross Bones | **Cross both index fingers** over each other at a $90^\circ$ angle to make an 'X'. |
+| **`Y`** | Palm Web | **Left hand open palm**; Right index finger placed in the web between Left thumb and index. |
+| **`Z`** | Two-Handed Z | Left hand open palm; Right index traces a 'Z' shape forward. |
+
+---
+
+### 3. Single-Handed Alphabets — Dominant Hand
+
+These letters only require **one hand** facing the camera:
+
+![ISL Single-Hand Alphabets Reference Grid](docs/dataset_samples/grid_single_alphabets.jpg)
+
+| Letter | Finger Configuration | Letter | Finger Configuration |
+| :---: | :--- | :---: | :--- |
+| **`C`** | Curved palm forming a sideways "**C**" arc. | **`O`** | All fingers curved to meet thumb tip (circular "**O**"). |
+| **`F`** | Three fingers flat horizontally across chest. | **`P`** | Index pointed downward with thumb loop. |
+| **`H`** | Index + Middle extended horizontally. | **`Q`** | Downward pointing pincher/hook shape. |
+| **`I`** | Closed fist with only **Pinky finger pointing UP**. | **`R`** | Index and Middle crossed ("crossed fingers"). |
+| **`J`** | Pinky extended, drawing a hook downward. | **`S`** | Solid closed fist facing the camera. |
+| **`L`** | Standard $90^\circ$ 'L' (Thumb sideways, Index UP). | **`U`** | Index + Middle extended straight UP **touching side-by-side**. |
+| **`V`** | Index + Middle extended and **spread wide into a 'V'**. | **`W`** | Index, Middle, and Ring extended and **spread into a 'W'**. |
 
 ---
 
@@ -21,12 +113,12 @@ Developed as an MCA portfolio project adhering strictly to academic and engineer
 | **Linguistic Scope** | Assumed single-hand ASL | Native **Dual-Hand Indian Sign Language (ISL)** |
 | **Classifier Model** | 599,000-parameter LSTM (Overfitted) | **Lightweight Deep MLP (28,515 parameters, 380 KB)** |
 | **Feature Space** | 1,662 features (84.5% irrelevant face mesh) | **126 clean features** (63 Left + 63 Right hand landmarks) |
-| **Spatial Normalization** | None (Absolute canvas coordinates) | **Wrist-origin translation + 3D bounding box scale invariance** |
-| **Missing-Hand Logic** | Imputed with fabricated vectors | Explicit $\mathbf{0}_{63}$ zero-padding + missing-hand bypass guard |
+| **Spatial Normalization** | None (Absolute canvas coordinates) | **Wrist-origin translation + palm-scale Euclidean invariance** |
+| **Cross-Slot Handedness** | Rigid slot lock (missed opposite-hand signs) | **Mode-aware cross-slot evaluation** (supports right & left handedness) |
 | **Inference Call Path** | `model.predict()` (~92 ms overhead) | **Direct C++ tensor execution `model(x)` (0.31 ms)** |
-| **Real-Time FPS** | 8–12 FPS (choppy, UI freezing) | **14–30 FPS on CPU** with non-blocking threaded queue |
-| **Duplicate Prevention** | None (Spammed "AAAAA" while holding) | **4-state FSM (`IDLE` $\to$ `HOLDING` $\to$ `COMMITTED` $\to$ `LOCKED`)** |
-| **User Interface** | Mocked predictions & hardcoded charts | **Live Threaded Desktop GUI + OpenCV HUD Mode** |
+| **Duplicate Prevention** | None (Spammed "33333" / "AAAAA") | **4-state FSM with 6-frame idle debounce stabilization** |
+| **Vocabulary Filtering** | Hardcoded monolithic softmax | **Dynamic mode constraints (`All`, `Digits`, `Alphabets`)** |
+| **User Interface** | Mocked predictions & static charts | **Glassmorphic AI UI + In-App Visual Gesture Guide** |
 | **Automated Testing** | Zero automated tests | **29 unit/integration tests (100% pytest pass rate)** |
 
 ---
@@ -34,36 +126,36 @@ Developed as an MCA portfolio project adhering strictly to academic and engineer
 ## 📐 System Architecture & Pipeline
 
 ```text
-[Raw Webcam 640x480]
+[Webcam Stream 640x480]
          │
          ▼
-[MediaPipe Hands (TFLite CPU)] ──► Extracts 21 Left + 21 Right 3D Joint Keypoints
+[MediaPipe Hands (TFLite CPU)]  ──► Extracts 21 Left + 21 Right 3D Joint Keypoints
          │
          ▼
-[126-D Spatial Normalizer]     ──► Wrist-Centering + Bounding Box Scale Normalization
+[126-D Spatial Normalizer]      ──► Wrist-Centering + Rigid Palm-Scale Invariance
          │
          ▼
-[Deep MLP Classifier]          ──► Direct Tensor Forward Pass (0.31 ms, 28k params)
+[SignPredictor Engine]          ──► Direct Tensor Pass (0.31 ms) + Mode-Masked Cross-Slot Eval
          │
          ▼
-[Temporal Majority Filter]     ──► Rolling Window (W=7), Confidence Threshold (τ=0.70)
+[Temporal Majority Filter]      ──► Rolling Window (W=7), Confidence Threshold (τ=0.60–0.70)
          │
          ▼
-[4-State Gesture FSM]          ──► IDLE ──► DETECTING ──► HOLDING (12f) ──► COMMITTED ──► LOCKED
+[4-State Gesture FSM]           ──► IDLE ──► HOLDING (12f) ──► COMMITTED ──► LOCKED (Debounced)
          │
          ▼
-[Text Assembly & Desktop GUI]  ──► Live HUD, Sentence Buffer, Space, Backspace, Clipboard
+[Web UI & PyWebView Desktop]    ──► Glassmorphism HUD, Sentence Buffer, Copy, Visual Reference Modal
 ```
 
 ### Mathematical Normalization Formulation:
 1. **Wrist Translation Invariance**: Centers all 21 hand landmarks relative to the wrist origin:
    $$\mathbf{P}'_i = \mathbf{P}_i - \mathbf{P}_{\text{wrist}} \quad \implies \quad \mathbf{P}'_0 = (0, 0, 0)$$
-2. **Bounding Box Scale Invariance**: Scales coordinates by the 3D bounding box span:
-   $$s = \max\left(\max_i x'_i - \min_i x'_i, \; \max_i y'_i - \min_i y'_i, \; \max_i z'_i - \min_i z'_i, \; 10^{-6}\right)$$
+2. **Rigid Palm-Scale Invariance**: Scales coordinates by the Euclidean distance between Wrist (Landmark 0) and Middle MCP Joint (Landmark 9):
+   $$s = \|\mathbf{P}'_9 - \mathbf{P}'_0\|_2 + \epsilon$$
    $$\mathbf{P}''_i = \frac{\mathbf{P}'_i}{s}$$
-3. **Dual-Hand 126-D Representation**:
+3. **Dual-Hand 126-D Unified Representation**:
    $$\mathbf{X} = [\mathbf{P}''_{\text{left}}, \; \mathbf{P}''_{\text{right}}] \in \mathbb{R}^{126}$$
-   Single-hand gestures populate the dominant hand slot (indices 63–125 for right hand), with absent hands padded with zeros.
+   Single-hand gestures populate the detected slot, while the absent hand is cleanly populated with zeros.
 
 ---
 
@@ -73,12 +165,12 @@ Profiled directly on host hardware (8 CPU cores, Windows 10, Python 3.10.20):
 
 | Pipeline Stage | Average Latency | % of Frame Time | Optimization Applied |
 | :--- | :--- | :--- | :--- |
-| **1. Camera Frame Capture** | 2.96 ms | 4.2% | Non-blocking OpenCV `cap.read()` |
+| **1. Camera Frame Capture** | 2.96 ms | 4.2% | DirectShow non-blocking OpenCV `cap.read()` |
 | **2. MediaPipe Hands Tracking** | 67.05 ms | 94.8% | TFLite XNNPACK multi-threaded CPU delegate |
 | **3. Dual-Hand Normalization** | 0.05 ms | 0.1% | Vectorized NumPy mathematical operations |
 | **4. Deep MLP Forward Pass** | **0.31 ms** | **0.4%** | Direct `tf.Tensor` C++ graph execution |
 | **5. Temporal Filter, FSM & UI** | 0.32 ms | 0.5% | Thread-safe queue packet dispatch |
-| **Total End-to-End Latency** | **70.70 ms** | **100.0%** | **14.1 FPS overall throughput on CPU** |
+| **Total End-to-End Latency** | **70.70 ms** | **100.0%** | **14–30 FPS overall throughput on CPU** |
 
 > **Key Architectural Takeaway:** The neural network classifier consumes only **0.4%** of the frame budget. Over 94% is consumed by MediaPipe palm detection. Selecting a lightweight MLP over a heavy CNN was essential for real-time CPU execution.
 
@@ -87,8 +179,8 @@ Profiled directly on host hardware (8 CPU cores, Windows 10, Python 3.10.20):
 ## 🎯 Model Accuracy & Empirical Validation
 
 - **Held-Out Test Set Accuracy:** **99.61% Top-1** (762/765 correct) | **99.87% Top-3** (764/765 correct)
-- **Top Confused Pairs:** `M` $\to$ `W` (1), `N` $\to$ `W` (1), `O` $\to$ `C` (1).
-- **Threshold Optimization:** In all 3 error cases, confidence was $< 0.62$. Applying our operational threshold $\tau = 0.70$ achieves **100.00% precision** on accepted validation frames while maintaining **98.69% coverage**.
+- **Precision / Recall:** Macro Average: **0.996**, Weighted Average: **0.996** across all 35 classes.
+- **Operational Threshold:** Applying $\tau = 0.60–0.70$ achieves **100.00% precision** on accepted real-world frames.
 - **Supported Classes (35 Total):**
   - Digits: `1, 2, 3, 4, 5, 6, 7, 8, 9`
   - Alphabets: `A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z`
@@ -105,14 +197,14 @@ Profiled directly on host hardware (8 CPU cores, Windows 10, Python 3.10.20):
 ### 2. Setup Virtual Environment
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/sign_language_v2.git
-cd sign_language_v2
+git clone https://github.com/Aditya-err/Sign-Language-Recognition-System.git
+cd Sign-Language-Recognition-System
 
 # Create and activate environment
-conda create -n isl_env python=3.10 -y
-conda activate isl_env
+conda create -n ai_sign_lang python=3.10 -y
+conda activate ai_sign_lang
 
-# Install dependencies
+# Install verified dependencies
 pip install -r requirements.txt
 ```
 
@@ -123,25 +215,30 @@ python -m pytest tests -v
 
 ### 4. Launch Application
 ```bash
-# Launch Desktop GUI (Recommended)
+# Double-click or run from terminal:
+.\run.bat
+
+# Or launch directly with Python:
 python run_app.py
-
-# Launch Lightweight OpenCV HUD Mode
-python run_app.py --opencv
-
-# Select Secondary Camera
-python run_app.py --camera 1
 ```
+The application opens in a native desktop window (powered by PyWebView) and starts a local web server at `http://127.0.0.1:5000`.
 
 ---
 
-## 💻 Desktop Application Features
+## 💻 Modern Web App UI Features
 
-- **Decoupled Concurrency:** Video capture and AI inference run in a background worker thread (`InferenceWorker`). The UI event loop never freezes.
-- **Dynamic HUD:** Displays prominent predicted sign (52pt font), 5-color state badges (`IDLE`, `DETECTING`, `HOLDING`, `COMMITTED`, `LOCKED`), confidence progress bar, and Top-3 hypotheses.
-- **Interactive Tuning Sliders:** Real-time adjustment of Confidence Threshold ($\tau \in [0.50, 0.95]$) and Commit Hold Frames ($T_{\text{hold}} \in [5, 25]$).
-- **Text Assembly Workspace:** Live current word preview, multiline editable sentence buffer, Space, Backspace, Clear, and Copy to Clipboard.
-- **Reference Guide:** In-app reference tab with all 35 supported signs and tips for optimal lighting and camera distance.
+1. **Reticle Optical HUD:** Computer vision crosshair reticles (`┌ ┐ └ ┘`) with real-time MediaPipe skeletal landmarks overlay.
+2. **Curated AI Themes:** One-click instant palette switching:
+   - **`Cyber`**: Neon cyan/teal with deep space navy background (`#080c14`).
+   - **`Neural`**: Amethyst and violet glow on obsidian backdrop.
+   - **`Solar`**: Tech amber with golden telemetry highlights.
+3. **Vocabulary Mode Switcher:**
+   - **`[All 35 Signs]`**: Unrestricted recognition across both digits and letters.
+   - **`[Digits (1–9)]`**: Completely masks out alphabets; enables 100% false-positive-free counting.
+   - **`[Alphabets (A–Z)]`**: Masks out digits; enables clean name and word fingerspelling.
+4. **Live In-App Visual Guide Modal:** Clicking **`[Visual Guide]`** opens a reference popup displaying the actual training photos for every sign.
+5. **Real-Time Training Ref Card:** Displays the dataset photo for the currently predicted sign right next to the letter glyph for immediate posture verification.
+6. **Sentence Construction Workspace:** Real-time text buffer with Current Word display, Space, Backspace, Clear, and one-click Clipboard copy.
 
 ---
 
@@ -149,64 +246,56 @@ python run_app.py --camera 1
 
 ```text
 sign_language_v2/
-├── config/                  # Configuration files
-├── data/
-│   ├── raw/                 # Subject-tagged raw landmark records
-│   ├── processed/           # Processed 126-D features & stratified splits (git-ignored)
-│   └── real_world/          # Independent live recordings directory
-├── docs/                    # Comprehensive Technical Documentation Suite
-│   ├── PROJECT_ARCHITECTURE.md   # Mathematical specification & architecture
-│   ├── MODEL_CARD.md             # Formal ML Model Card
-│   ├── DATASET_DOCUMENTATION.md  # Dataset provenance & feature pipeline
-│   ├── INSTALLATION_GUIDE.md     # Step-by-step developer setup
-│   ├── USER_GUIDE.md             # End-user manual & operating instructions
-│   ├── KNOWN_LIMITATIONS.md      # Documented system boundaries
-│   ├── INTERVIEW_PREPARATION.md  # 20 detailed technical Q&As for MCA freshers
-│   ├── DEMO_PLAN.md              # 2.5-minute video demonstration storyboard
-│   ├── RESUME_SNIPPET.md         # ATS-friendly resume bullet points
-│   ├── PORTFOLIO_SUMMARY.md      # Elevator pitch & 1-page showcase
-│   ├── MODEL_COMPARISON.md       # Architecture & retraining evaluation
-│   ├── REAL_WORLD_TESTING_PROTOCOL.md # 35-class testing matrix
-│   └── PHASE_1_REPORT.md through PHASE_7_REPORT.md # Audit reports
-├── models/                  # Checkpointed weights
-│   └── best_model.keras     # 28,515-parameter production MLP (380 KB)
-├── reports/                 # Benchmarks, metrics, and evaluation summaries
-│   ├── benchmark_300_frames.json # Hardware latency profiling results
-│   ├── threshold_optimization.json # Validation threshold trade-off analysis
-│   └── evaluation_report.md      # Test split confusion matrix & metrics
+├── docs/                                # Technical Documentation Suite
+│   ├── dataset_samples/                 # Training dataset photos & grid charts
+│   │   ├── grid_digits.jpg              # Digits 1 to 9 labeled reference grid
+│   │   ├── grid_dual_alphabets.jpg      # Dual-hand ISL letters reference grid
+│   │   ├── grid_single_alphabets.jpg    # Single-hand letters reference grid
+│   │   └── [1..9, A..Z].jpg             # Individual class training images
+│   ├── USER_GESTURE_GUIDELINES.md       # Step-by-step user operating manual
+│   ├── ISL_GESTURE_CHART.md             # Complete physical gesture reference
+│   ├── PROJECT_ARCHITECTURE.md          # Mathematical specification
+│   ├── MODEL_CARD.md                    # Formal ML Model Card
+│   ├── DATASET_DOCUMENTATION.md         # Dataset provenance & feature pipeline
+│   ├── INTERVIEW_PREPARATION.md         # 20 technical Q&As for MCA interviews
+│   └── PHASE_1_REPORT.md ... PHASE_7    # Complete engineering audit trail
+├── models/                              # Model Checkpoints
+│   └── best_model.keras                 # 28,515-parameter production MLP (380 KB)
+├── reports/                             # Empirical Validation Reports
+│   ├── benchmark_300_frames.json        # Hardware latency profiling
+│   └── evaluation_report.md             # Test set metrics & confusion matrix
 ├── src/
-│   ├── core/                # Landmark normalization & MediaPipe wrapper
-│   │   ├── normalization.py # 126-D dual-hand spatial normalizer
-│   │   └── hand_detector.py # MediaPipe Hands abstraction
-│   ├── data/                # Extraction, splitting, augmentation, live recorder
-│   ├── inference/           # Real-time predictor, smoother, FSM, benchmarks
-│   ├── models/              # MLP architecture, training, and threshold optimization
-│   └── ui/                  # Desktop Tkinter GUI & OpenCV HUD
-├── tests/                   # 29 automated pytest unit and integration tests
-├── requirements.txt         # Verified package dependencies
-└── run_app.py               # Unified application launcher
+│   ├── core/                            # Normalization & MediaPipe abstraction
+│   ├── data/                            # Dataset extraction & augmentation
+│   ├── inference/                       # Predictor, temporal smoother, FSM
+│   └── ui/                              # Web application & desktop PyWebView
+│       ├── web/index.html               # Cybernetic Glassmorphic UI
+│       └── web_app.py                   # Local streaming server
+├── tests/                               # 29 automated pytest unit tests
+├── requirements.txt                     # Package dependencies
+├── run.bat                              # One-click Windows launcher
+├── run_app.py                           # CLI entrypoint
+└── USER_GUIDELINE.md                    # Root user manual
 ```
 
 ---
 
-## 📖 Technical Documentation Links
+## 📖 Key Documentation Links
 
+- [User Operating Guide (Detailed Manual)](USER_GUIDELINE.md)
+- [Gesture Reference Chart](docs/ISL_GESTURE_CHART.md)
 - [System Architecture Specification](docs/PROJECT_ARCHITECTURE.md)
 - [Formal Model Card](docs/MODEL_CARD.md)
 - [Dataset Documentation & Feature Pipeline](docs/DATASET_DOCUMENTATION.md)
 - [Installation Guide](docs/INSTALLATION_GUIDE.md)
-- [User Guide & Operations](docs/USER_GUIDE.md)
-- [Known Limitations & Roadmap](docs/KNOWN_LIMITATIONS.md)
 - [MCA Interview Preparation (20 Q&As)](docs/INTERVIEW_PREPARATION.md)
-- [Video Demonstration Storyboard](docs/DEMO_PLAN.md)
-- [ATS Resume Snippets](docs/RESUME_SNIPPET.md)
 - [Portfolio Showcase](docs/PORTFOLIO_SUMMARY.md)
 
 ---
 
 ## ⚖️ Engineering Integrity & Ethical Disclosure
 
-1. **Academic Honesty:** No synthetic or mocked predictions. Every reported metric is backed by automated tests, hardware profiling scripts, or confusion matrices.
+1. **Academic Honesty:** Zero synthetic or mocked predictions. Every reported metric is verified by automated tests, hardware profiling scripts, and empirical confusion matrices.
 2. **Unsupported Classes:** Digit `0` is absent from the original dataset and is officially classified as unsupported rather than synthesized.
 3. **Autocorrelation Transparency:** We disclose that 23.8% of test split frames share proximity to training frames due to video extraction. Field validation on unseen participants is tracked independently in `reports/real_world_evaluation.md`.
 
